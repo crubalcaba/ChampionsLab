@@ -1891,6 +1891,66 @@ export const MOVE_DATA: Record<string, EngineMove> = {
     secondary: { chance: 100, status: "poison" },
     effect: "Poisons the target and lowers its Speed by 2 stages.",
   },
+  "Burning Bulwark": {
+    name: "Burning Bulwark", type: "fire", category: "status", basePower: 0,
+    accuracy: 0, pp: 10, priority: 4, target: "self",
+    flags: { protect: true, priority: true },
+    effect: "Blocks most moves for one turn. Contact moves burn the attacker.",
+  },
+  "Charge Beam": {
+    name: "Charge Beam", type: "electric", category: "special", basePower: 50,
+    accuracy: 90, pp: 10, priority: 0, target: "normal",
+    flags: {},
+    secondary: { chance: 70, self: true, boosts: { spAtk: 1 } },
+  },
+  "Draining Kiss": {
+    name: "Draining Kiss", type: "fairy", category: "special", basePower: 50,
+    accuracy: 100, pp: 10, priority: 0, target: "normal",
+    flags: { drain: 0.75, contact: true },
+  },
+  "Future Sight": {
+    name: "Future Sight", type: "psychic", category: "special", basePower: 120,
+    accuracy: 100, pp: 10, priority: 0, target: "normal",
+    flags: {},
+    effect: "Hits the target two turns after use. Ignores Protect and type immunities.",
+  },
+  "Imprison": {
+    name: "Imprison", type: "psychic", category: "status", basePower: 0,
+    accuracy: 0, pp: 10, priority: 0, target: "self",
+    flags: {},
+    effect: "Prevents the target from using any moves the user knows.",
+  },
+  "Life Dew": {
+    name: "Life Dew", type: "water", category: "status", basePower: 0,
+    accuracy: 0, pp: 10, priority: 0, target: "self",
+    flags: {},
+    effect: "Restores the user and ally's HP by 25% of their max HP.",
+  },
+  "Silk Trap": {
+    name: "Silk Trap", type: "bug", category: "status", basePower: 0,
+    accuracy: 0, pp: 10, priority: 4, target: "self",
+    flags: { protect: true, priority: true },
+    effect: "Blocks most moves for one turn. Lowers Attack of contact attackers by 1 stage.",
+  },
+  "Strength Sap": {
+    name: "Strength Sap", type: "grass", category: "status", basePower: 0,
+    accuracy: 100, pp: 10, priority: 0, target: "normal",
+    flags: {},
+    effect: "Restores HP equal to the target's Attack stat and lowers its Attack by 1 stage.",
+    secondary: { chance: 100, boosts: { attack: -1 } },
+  },
+  "Struggle": {
+    name: "Struggle", type: "normal", category: "physical", basePower: 50,
+    accuracy: 0, pp: 1, priority: 0, target: "normal",
+    flags: { recoil: 25 },
+    effect: "Used only when the user has no usable moves. User takes 25% recoil damage.",
+  },
+  "Throat Chop": {
+    name: "Throat Chop", type: "dark", category: "physical", basePower: 80,
+    accuracy: 100, pp: 15, priority: 0, target: "normal",
+    flags: { contact: true },
+    effect: "Prevents the target from using sound-based moves for two turns.",
+  },
 };
 
 /** Look up a move by name */

@@ -34,6 +34,11 @@ function isMegaStoneItem(item: string): boolean {
   return item.endsWith("ite") || item.endsWith("ite X") || item.endsWith("ite Y") || item.endsWith("ite Z");
 }
 
+/** Check if a Pokémon is grounded (affected by terrain) */
+function isGrounded(mon: BattlePokemon): boolean {
+  return !mon.types.includes("flying") && mon.ability !== "Levitate" && mon.ability !== "Sky High";
+}
+
 /** Resolve mega form data for a Pokémon holding its mega stone (used for pre-resolution only) */
 function resolveMegaForm(pokemon: ChampionsPokemon, set: CommonSet): {
   baseStats: BaseStats;
@@ -391,6 +396,7 @@ function estimateThreatLevel(
   let maxPercent = 0;
   const options: DamageCalcOptions = {
     weather: field.weather as DamageCalcOptions["weather"],
+    terrain: isGrounded(attacker) ? (field.terrain as DamageCalcOptions["terrain"]) : undefined,
     isDoubles: true,
     reflect: (attackerSide === 1 ? field.side2 : field.side1).reflect > 0,
     lightScreen: (attackerSide === 1 ? field.side2 : field.side1).lightScreen > 0,
@@ -398,6 +404,8 @@ function estimateThreatLevel(
   for (const moveName of attacker.set.moves) {
     const move = getMove(moveName);
     if (!move || move.category === "status") continue;
+    // Fake Out is neutralized by Inner Focus (no flinch) and completely blocked by Armor Tail
+    if (moveName === "Fake Out" && (defender.ability === "Inner Focus" || defender.ability === "Armor Tail")) continue;
     const atk: DamageCalcPokemon = {
       baseStats: attacker.effectiveBaseStats, sp: attacker.set.sp,
       nature: attacker.set.nature as NatureName, types: attacker.types,
@@ -429,6 +437,7 @@ function allyCanKO(
   if (!ally || ally.isFainted) return false;
   const options: DamageCalcOptions = {
     weather: field.weather as DamageCalcOptions["weather"],
+    terrain: isGrounded(ally) ? (field.terrain as DamageCalcOptions["terrain"]) : undefined,
     isDoubles: true,
     reflect: (allySide === 1 ? field.side2 : field.side1).reflect > 0,
     lightScreen: (allySide === 1 ? field.side2 : field.side1).lightScreen > 0,
@@ -489,6 +498,7 @@ function evaluateMoveOption(
   const oppSide: 1 | 2 = userSide === 1 ? 2 : 1;
   const options: DamageCalcOptions = {
     weather: field.weather as DamageCalcOptions["weather"],
+    terrain: isGrounded(user) ? (field.terrain as DamageCalcOptions["terrain"]) : undefined,
     isDoubles: true,
     lightScreen: (userSide === 1 ? field.side2 : field.side1).lightScreen > 0,
     reflect: (userSide === 1 ? field.side2 : field.side1).reflect > 0,
@@ -545,8 +555,10 @@ function evaluateMoveOption(
       // Fake Out support mons (Follow Me users, etc.)
       if (t.set.moves.includes("Follow Me") || t.set.moves.includes("Rage Powder")) score += 15;
       
-      // Don't Fake Out mons with Inner Focus/Clear Body
-      if (["Inner Focus", "Shield Dust", "Own Tempo"].includes(t.ability)) score -= 40;
+      // Skip Fake Out against Armor Tail (completely blocks priority moves)
+      if (t.ability === "Armor Tail") continue;
+      // Penalty for Inner Focus (blocks flinch — Fake Out still deals damage but loses its main value)
+      if (t.ability === "Inner Focus") score -= 40;
       
       // Less valuable on weakened mons
       if (t.currentHP < t.maxHP * 0.3) score -= 20;
@@ -619,7 +631,11 @@ function evaluateMoveOption(
               defStages: opp.boosts.defense, spDefStages: opp.boosts.spDef,
               currentHPPercent: (opp.currentHP / opp.maxHP) * 100,
             };
-            const res = calculateDamage(atk, def, m, { weather: field.weather as DamageCalcOptions["weather"], isDoubles: true });
+            const res = calculateDamage(atk, def, m, {
+              weather: field.weather as DamageCalcOptions["weather"],
+              terrain: isGrounded(user) ? (field.terrain as DamageCalcOptions["terrain"]) : undefined,
+              isDoubles: true,
+            });
             if (res.isOHKO || (res.damage[0] / opp.currentHP) >= 1.0) {
               canKO = true;
               break;
@@ -683,6 +699,16 @@ function evaluateMoveOption(
         if (state.turn <= 1) score += 10;
         // Less valuable if only 1 mon left
         if (allies.filter(a => a && !a.isFainted).length === 0 && myAlive <= 1) score -= 20;
+        // Prankster = guaranteed first action, makes Tailwind far more reliable
+        if (user.ability === "Prankster") score += 20;
+        // Penalty if we're slower than all active opponents (Tailwind comes too late)
+        const activeOpponents = targets.filter((t): t is BattlePokemon => t !== null && !t.isFainted);
+        if (activeOpponents.length > 0 && activeOpponents.every(o => getActualSpeed(o, field, oppSide) > getActualSpeed(user, field, userSide))) {
+          score -= 18;
+        }
+        // Penalty if ally has Prankster + Tailwind (let them set it with priority)
+        const pranksterAlly = allies.find(a => a && !a.isFainted && a.ability === "Prankster" && a.set.moves.includes("Tailwind"));
+        if (pranksterAlly && user.ability !== "Prankster") score -= 25;
       }
       choices.push({ moveIndex: 0, moveName, targetSlot: -1, score });
       return choices;
@@ -1019,6 +1045,11 @@ function aiChooseAction(
     if (mon.ability === "Zero to Hero" && !mon.hasSwitchedOut && !mon.hasTransformed) {
       // Palafin in Zero Form is USELESS (70 Atk). Switch out immediately.
       switchScore = 150; // Higher than any move score - this is mandatory VGC play
+    }
+    
+    // Mega Evolved Pokemon: strong incentive to stay in (they're powerful win conditions)
+    if (mon.hasMegaEvolved) {
+      switchScore -= 22; // Don't bench your mega unless absolutely necessary
     }
     
     // Tactical switching: evaluate matchup quality
@@ -1436,8 +1467,12 @@ function executeMove(
 ): void {
   if (user.isFainted || !user.isAlive) return;
   
-  const move = getMove(moveName);
-  if (!move) return;
+  let move = getMove(moveName);
+  if (!move) {
+    // Fallback to Struggle if move is not in database
+    move = getMove("Struggle");
+    if (!move) return;
+  }
 
   // ── CHOICE LOCK: lock into first move used with Choice item ────────────
   if (!user.itemConsumed && (user.item === "Choice Scarf" || user.item === "Choice Band" || user.item === "Choice Specs")) {
@@ -1575,6 +1610,16 @@ function executeMove(
   user.lastMoveImmune = false;
   user.spreadMissed = [];
   user.spreadImmune = [];
+
+  // Armor Tail: blocks priority moves from opponents
+  const movePriority = move.priority +
+    (user.ability === "Prankster" && move.category === "status" ? 1 : 0) +
+    (user.ability === "Gale Wings" && move.type === "flying" && user.currentHP === user.maxHP ? 1 : 0);
+  if (movePriority > 0 && opponents.some(o => o && !o.isFainted && o.ability === "Armor Tail")) {
+    user.lastMoveImmune = true;
+    return; // Move fails entirely
+  }
+
     for (const t of targets) {
     // Protected targets block all damage (except Piercing Drill / Unseen Fist pierce)
     if (t.isProtected) {
@@ -1649,6 +1694,7 @@ function executeMove(
     const opponentTargetCount = opponents.filter(o => o && !o.isFainted).length;
     const options: DamageCalcOptions = {
       weather: state.field.weather as DamageCalcOptions["weather"],
+      terrain: isGrounded(user) ? (state.field.terrain as DamageCalcOptions["terrain"]) : undefined,
       isDoubles: true,
       reflect: (userSide === 1 ? state.field.side2 : state.field.side1).reflect > 0,
       lightScreen: (userSide === 1 ? state.field.side2 : state.field.side1).lightScreen > 0,
@@ -1810,7 +1856,7 @@ function executeMove(
         t.status = move.secondary.status;
       }
       if (move.secondary.volatileStatus === "flinch") {
-        if (!["Inner Focus", "Shield Dust", "Own Tempo"].includes(t.ability)) {
+        if (t.ability !== "Inner Focus") {
           t.hasMoved = true; // Simplified: prevent action
         }
       }
@@ -1977,7 +2023,7 @@ function smartPick4(
     if (hasSpeedControl) score += 12;
     if (abilityWeather) score += 18;
     if (isIntimidate) score += 10;
-    if (isMegaStoneItem(s.item)) score += 10;
+    if (isMegaStoneItem(s.item)) score += 18; // Megas are powerful win conditions - prioritize bringing them
     
     indivScores.push(score);
     meta.push({
@@ -2347,18 +2393,19 @@ export function simulateBattle(
     
     // Execute actions
     const switchedOutThisTurn: BattlePokemon[] = [];
-    for (const action of actions) {
+    for (let i = 0; i < actions.length; i++) {
+      const action = actions[i];
       if (action.mon.isFainted) continue;
       // Flinch check: Fake Out's flinch sets hasMoved = true, preventing action
       if (action.mon.hasMoved && !action.switchOut) continue;
-      
+
       // Armor Tail: block priority moves targeting the side with Armor Tail
       if (!action.switchOut && action.priority > 0) {
         const targetSide = action.sideIndex === 1 ? state.active2 : state.active1;
         const hasArmorTail = targetSide.some(p => p && !p.isFainted && p.ability === "Armor Tail");
         if (hasArmorTail) continue; // Priority move blocked
       }
-      
+
       // Handle switch-out actions
       if (action.switchOut) {
         const active = action.sideIndex === 1 ? state.active1 : state.active2;
@@ -2369,7 +2416,7 @@ export function simulateBattle(
         }
         continue;
       }
-      
+
       // Sucker Punch: fails if target is using a status move, switching, or already moved
       if (action.moveName === "Sucker Punch") {
         const targetMon = (action.sideIndex === 1 ? state.active2 : state.active1)[action.targetSlot];
@@ -2397,13 +2444,30 @@ export function simulateBattle(
           target = redirector;
         }
       }
-      
+
       executeMove(
         action.mon, action.moveName, target,
         allies.filter((a): a is BattlePokemon => a !== null && a !== action.mon),
         opponents.filter((a): a is BattlePokemon => a !== null),
         state, action.sideIndex
       );
+
+      // ── RE-SORT REMAINING ACTIONS AFTER SPEED-AFFECTING MOVES ─────
+      // Tailwind and Trick Room affect speed for the remainder of the turn.
+      // Recompute speeds for all unexecuted actions and re-sort.
+      if (action.moveName === "Tailwind" || action.moveName === "Trick Room") {
+        for (let j = i + 1; j < actions.length; j++) {
+          if (!actions[j].mon.isFainted) {
+            actions[j].speed = getActualSpeed(actions[j].mon, state.field, actions[j].sideIndex);
+          }
+        }
+        const tail = actions.slice(i + 1).sort((a, b) => {
+          if (a.priority !== b.priority) return b.priority - a.priority;
+          if (state.field.trickRoom) return a.speed - b.speed;
+          return b.speed - a.speed;
+        });
+        actions.splice(i + 1, actions.length - i - 1, ...tail);
+      }
     }
     
     // Replace fainted Pokémon
@@ -2486,6 +2550,8 @@ export interface DetailedBattleResult {
   log: BattleLogEntry[];
   team1Names: string[];
   team2Names: string[];
+  team1AllNames?: string[]; // Full team (for showing benched mons in UI)
+  team1PickedIndices?: number[];
 }
 
 /** Run a battle with full turn-by-turn log */
@@ -2743,7 +2809,8 @@ export function simulateBattleWithLog(
     });
 
     const switchedOutThisTurnLogged: BattlePokemon[] = [];
-    for (const action of actions) {
+    for (let i = 0; i < actions.length; i++) {
+      const action = actions[i];
       if (action.mon.isFainted) continue;
       // Flinch check: Fake Out's flinch sets hasMoved = true, preventing action
       if (action.mon.hasMoved && !action.switchOut) {
@@ -2994,6 +3061,21 @@ export function simulateBattleWithLog(
           }
         }
       }
+
+      // ── RE-SORT REMAINING ACTIONS AFTER SPEED-AFFECTING MOVES ─────
+      if (action.moveName === "Tailwind" || action.moveName === "Trick Room") {
+        for (let j = i + 1; j < actions.length; j++) {
+          if (!actions[j].mon.isFainted) {
+            actions[j].speed = getActualSpeed(actions[j].mon, state.field, actions[j].sideIndex);
+          }
+        }
+        const tail = actions.slice(i + 1).sort((a, b) => {
+          if (a.priority !== b.priority) return b.priority - a.priority;
+          if (state.field.trickRoom) return a.speed - b.speed;
+          return b.speed - a.speed;
+        });
+        actions.splice(i + 1, actions.length - i - 1, ...tail);
+      }
     }
 
     for (const [sideIndex, active] of [[1, state.active1], [2, state.active2]] as [1 | 2, (BattlePokemon | null)[] & { length: 2 }][]) {
@@ -3090,6 +3172,8 @@ export function simulateBattleWithLog(
     log,
     team1Names: bt1.map(p => p.pokemon.name),
     team2Names: bt2.map(p => p.pokemon.name),
+    team1AllNames: team1Pokemon.map(p => p.name),
+    team1PickedIndices: idx1,
   };
 }
 

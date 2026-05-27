@@ -25,7 +25,7 @@ const GAME = "VGC";
 const MIN_PLAYERS = parseInt(process.argv.find(a => a.startsWith("--min-players="))?.split("=")[1] ?? "8");
 const DRY_RUN = process.argv.includes("--dry-run");
 const TOP_CUT = 8; // top N placements to record as teams
-const RATE_LIMIT_MS = 6500; // ~50 requests per 5 min = 1 every 6s
+const RATE_LIMIT_MS = 2500; // ~50 requests per 5 min = 1 every 6s
 const CACHE_PATH = path.join(__dirname, "limitless-cache.json");
 const OUTPUT_PATH = path.join(__dirname, "..", "src", "lib", "simulation-data.ts");
 

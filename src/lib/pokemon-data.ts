@@ -4472,6 +4472,7 @@ export const POKEMON_SEED: ChampionsPokemon[] = [
   {
     "id": 5713,
     "name": "Hisuian Avalugg",
+    "showdownName": "Avalugg-Hisui",
     "dexNumber": 713,
     "types": [
       "ice",
@@ -5197,6 +5198,7 @@ export const POKEMON_SEED: ChampionsPokemon[] = [
   {
     "id": 10100,
     "name": "Alolan Raichu",
+    "showdownName": "Raichu-Alola",
     "dexNumber": 26,
     "types": [
       "electric",
@@ -5598,6 +5600,7 @@ export const POKEMON_SEED: ChampionsPokemon[] = [
   {
     "id": 10103,
     "name": "Alolan Ninetales",
+    "showdownName": "Ninetales-Alola",
     "dexNumber": 38,
     "types": [
       "ice",
@@ -5821,6 +5824,7 @@ export const POKEMON_SEED: ChampionsPokemon[] = [
   {
     "id": 5059,
     "name": "Hisuian Arcanine",
+    "showdownName": "Arcanine-Hisui",
     "dexNumber": 59,
     "types": [
       "fire",
@@ -6362,6 +6366,7 @@ export const POKEMON_SEED: ChampionsPokemon[] = [
   {
     "id": 6080,
     "name": "Galarian Slowbro",
+    "showdownName": "Slowbro-Galar",
     "dexNumber": 80,
     "types": [
       "poison",
@@ -7174,6 +7179,7 @@ export const POKEMON_SEED: ChampionsPokemon[] = [
   {
     "id": 10250,
     "name": "Paldean Tauros",
+    "showdownName": "Tauros-Paldea",
     "dexNumber": 128,
     "types": [
       "fighting"
@@ -7271,6 +7277,7 @@ export const POKEMON_SEED: ChampionsPokemon[] = [
   {
     "id": 10251,
     "name": "Paldean Tauros (Blaze)",
+    "showdownName": "Tauros-Paldea-Blaze",
     "dexNumber": 128,
     "types": [
       "fighting",
@@ -7375,6 +7382,7 @@ export const POKEMON_SEED: ChampionsPokemon[] = [
   {
     "id": 10252,
     "name": "Paldean Tauros (Aqua)",
+    "showdownName": "Tauros-Paldea-Aqua",
     "dexNumber": 128,
     "types": [
       "fighting",
@@ -8675,6 +8683,7 @@ export const POKEMON_SEED: ChampionsPokemon[] = [
   {
     "id": 5157,
     "name": "Hisuian Typhlosion",
+    "showdownName": "Typhlosion-Hisui",
     "dexNumber": 157,
     "types": [
       "fire",
@@ -9684,6 +9693,7 @@ export const POKEMON_SEED: ChampionsPokemon[] = [
   {
     "id": 6199,
     "name": "Galarian Slowking",
+    "showdownName": "Slowking-Galar",
     "dexNumber": 199,
     "types": [
       "poison",
@@ -15844,6 +15854,7 @@ export const POKEMON_SEED: ChampionsPokemon[] = [
   {
     "id": 10336,
     "name": "Hisuian Samurott",
+    "showdownName": "Samurott-Hisui",
     "dexNumber": 503,
     "types": [
       "water",
@@ -16798,6 +16809,7 @@ export const POKEMON_SEED: ChampionsPokemon[] = [
   {
     "id": 10340,
     "name": "Hisuian Zoroark",
+    "showdownName": "Zoroark-Hisui",
     "dexNumber": 571,
     "types": [
       "normal",
@@ -17197,6 +17209,7 @@ export const POKEMON_SEED: ChampionsPokemon[] = [
   {
     "id": 6618,
     "name": "Galarian Stunfisk",
+    "showdownName": "Stunfisk-Galar",
     "dexNumber": 618,
     "types": [
       "ground",
@@ -19828,6 +19841,7 @@ export const POKEMON_SEED: ChampionsPokemon[] = [
   {
     "id": 10341,
     "name": "Hisuian Decidueye",
+    "showdownName": "Decidueye-Hisui",
     "dexNumber": 724,
     "types": [
       "grass",
@@ -27926,6 +27940,7 @@ export const POKEMON_SEED: ChampionsPokemon[] = [
   {
     "id": 5706,
     "name": "Hisuian Goodra",
+    "showdownName": "Goodra-Hisui",
     "dexNumber": 706,
     "types": [
       "steel",

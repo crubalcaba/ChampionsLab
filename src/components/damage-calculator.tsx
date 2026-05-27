@@ -138,12 +138,17 @@ function getDefaultSet(p: ChampionsPokemon): CommonSet {
   const usage = USAGE_DATA[p.id];
   if (usage && usage.length > 0) return usage[0];
   const isSpecial = p.baseStats.spAtk > p.baseStats.attack;
+  const hasProtect = p.moves.some(m => m.name === "Protect");
+  const damaging = p.moves.filter(m => m.category !== "status").map(m => m.name);
+  const moves: string[] = [];
+  if (hasProtect) moves.push("Protect");
+  moves.push(...damaging.slice(0, 4 - moves.length));
   return {
     name: p.name,
     nature: isSpecial ? "Modest" : "Adamant",
     ability: p.abilities[0]?.name ?? "",
     item: "Life Orb",
-    moves: p.moves.filter(m => m.category !== "status").slice(0, 4).map(m => m.name),
+    moves,
     sp: { hp: 2, attack: isSpecial ? 0 : 32, defense: 0, spAtk: isSpecial ? 32 : 0, spDef: 0, speed: 32 },
   };
 }
@@ -377,7 +382,10 @@ export default function DamageCalculator() {
 
   const selectPokemon = useCallback((p: ChampionsPokemon) => {
     const set = getDefaultSet(p);
-    const slot: PokemonSlot = { pokemon: p, set, stages: { atk: 0, def: 0, spAtk: 0, spDef: 0, speed: 0 }, isBurned: false, currentHP: 100 };
+    // In the damage calculator, start with zero SP so users can freely build
+    // any test scenario. Ability/item/moves/nature still load from preset.
+    const zeroSP = { hp: 0, attack: 0, defense: 0, spAtk: 0, spDef: 0, speed: 0 };
+    const slot: PokemonSlot = { pokemon: p, set: { ...set, sp: zeroSP }, stages: { atk: 0, def: 0, spAtk: 0, spDef: 0, speed: 0 }, isBurned: false, currentHP: 100 };
     if (pickerTarget === "attacker") {
       setAttacker(slot);
       setSelectedMove(null);

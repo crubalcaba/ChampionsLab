@@ -71,12 +71,17 @@ function bestAvailableSet(p: ChampionsPokemon): CommonSet {
     return set;
   }
   const isSpecial = p.baseStats.spAtk > p.baseStats.attack;
+  const hasProtect = p.moves.some(m => m.name === "Protect");
+  const damaging = p.moves.filter(m => m.category !== "status").map(m => m.name);
+  const moves: string[] = [];
+  if (hasProtect) moves.push("Protect");
+  moves.push(...damaging.slice(0, 4 - moves.length));
   return {
     name: p.name,
     nature: isSpecial ? "Modest" : "Adamant",
     ability: p.abilities[0]?.name ?? "",
     item: "Focus Sash",
-    moves: p.moves.filter(m => m.category !== "status").slice(0, 4).map(m => m.name),
+    moves,
     sp: { hp: 2, attack: isSpecial ? 0 : 32, defense: 0, spAtk: isSpecial ? 32 : 0, spDef: 0, speed: 32 },
   };
 }

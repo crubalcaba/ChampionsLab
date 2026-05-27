@@ -1506,13 +1506,31 @@ export default function BattleBotPage() {
                     <div className="grid grid-cols-2 gap-4 mb-4">
                       <div className="p-3 rounded-xl bg-blue-50 border border-blue-200">
                         <p className="text-[10px] font-bold text-blue-600 uppercase mb-1">{t('battleBot.yourTeamLabel')}</p>
-                        <div className="flex gap-1 flex-wrap">
-                          {result.sampleBattle.team1Names.map(name => {
-                            const mon = POKEMON_SEED.find(p => p.name === name);
-                            return mon ? (
-                              <Image key={name} src={mon.sprite} alt={name} width={28} height={28} unoptimized title={name} />
-                            ) : <span key={name} className="text-[10px]">{name}</span>;
-                          })}
+                        <div className="flex gap-1 flex-wrap items-center">
+                          {result.sampleBattle.team1AllNames && result.sampleBattle.team1AllNames.length > result.sampleBattle.team1Names.length ? (
+                            // Show full team with benched mons dimmed
+                            result.sampleBattle.team1AllNames.map((name, idx) => {
+                              const isPicked = result.sampleBattle!.team1PickedIndices?.includes(idx);
+                              const mon = POKEMON_SEED.find(p => p.name === name);
+                              return mon ? (
+                                <div key={name + idx} className={cn("relative", !isPicked && "opacity-40")} title={isPicked ? name : `${name} (benched)`}>
+                                  <Image src={mon.sprite} alt={name} width={28} height={28} unoptimized />
+                                  {!isPicked && (
+                                    <div className="absolute inset-0 flex items-center justify-center">
+                                      <div className="w-3 h-0.5 bg-gray-500 rounded-full rotate-45" />
+                                    </div>
+                                  )}
+                                </div>
+                              ) : <span key={name + idx} className={cn("text-[10px]", !isPicked && "opacity-40")}>{name}</span>;
+                            })
+                          ) : (
+                            result.sampleBattle.team1Names.map(name => {
+                              const mon = POKEMON_SEED.find(p => p.name === name);
+                              return mon ? (
+                                <Image key={name} src={mon.sprite} alt={name} width={28} height={28} unoptimized title={name} />
+                              ) : <span key={name} className="text-[10px]">{name}</span>;
+                            })
+                          )}
                         </div>
                       </div>
                       <div className="p-3 rounded-xl bg-red-50 border border-red-200">

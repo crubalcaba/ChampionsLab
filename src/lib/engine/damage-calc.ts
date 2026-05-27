@@ -510,6 +510,13 @@ export function calculateDamage(
   if (effectiveWeather === "rain" && moveCalc.type === "water") weatherMult = 1.5;
   if (effectiveWeather === "rain" && moveCalc.type === "fire") weatherMult = 0.5;
 
+  // Terrain modifiers
+  let terrainMult = 1;
+  if (options.terrain === "electric" && moveCalc.type === "electric") terrainMult = 1.3;
+  if (options.terrain === "grassy" && moveCalc.type === "grass") terrainMult = 1.3;
+  if (options.terrain === "psychic" && moveCalc.type === "psychic") terrainMult = 1.3;
+  if (options.terrain === "misty" && moveCalc.type === "dragon") terrainMult = 0.5;
+
   // Screen multipliers
   let screenMult = 1;
   if (options.auroraVeil || (options.reflect && isPhysical) || (options.lightScreen && !isPhysical)) {
@@ -564,7 +571,7 @@ export function calculateDamage(
   );
 
   // Apply all multipliers
-  const modifiers = stabMult * effectiveness * weatherMult * screenMult *
+  const modifiers = stabMult * effectiveness * weatherMult * terrainMult * screenMult *
     spreadMult * critMult * burnMult * itemMult * helpingHandMult * friendGuardMult * defenderItemMult;
 
   // Check if defender resist berry activated
@@ -614,6 +621,7 @@ export function calculateDamage(
   const activeModifiers: ActiveModifier[] = [];
   if (stabMult !== 1) activeModifiers.push({ name: "STAB", multiplier: stabMult });
   if (weatherMult !== 1) activeModifiers.push({ name: "Weather", multiplier: weatherMult });
+  if (terrainMult !== 1) activeModifiers.push({ name: "Terrain", multiplier: terrainMult });
   if (screenMult !== 1) activeModifiers.push({ name: options.auroraVeil ? "Aurora Veil" : isPhysical ? "Reflect" : "Light Screen", multiplier: screenMult });
   if (spreadMult !== 1) activeModifiers.push({ name: "Spread", multiplier: spreadMult });
   if (critMult !== 1) activeModifiers.push({ name: "Critical Hit", multiplier: critMult });
