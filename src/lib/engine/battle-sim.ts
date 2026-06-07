@@ -897,8 +897,15 @@ function evaluateMoveOption(
     
     // Priority move bonus: securing KOs on weakened mons
     if (move.priority > 0) {
-      if (percentOfCurrent >= 100) score += 25; // Priority KO is extremely safe
-      else if (target.currentHP < target.maxHP * 0.4) score += 15;
+      // Armor Tail completely blocks priority moves targeting its side
+      const blockedByArmorTail = target.ability === "Armor Tail" ||
+        (isSpreadMove(move) && targets.some(t => t && !t.isFainted && t.ability === "Armor Tail"));
+      if (blockedByArmorTail) {
+        score -= 120; // Completely wasted - avoid at all costs
+      } else {
+        if (percentOfCurrent >= 100) score += 25; // Priority KO is extremely safe
+        else if (target.currentHP < target.maxHP * 0.4) score += 15;
+      }
     }
     
     // Spread move bonus (hits both opponents in doubles)
@@ -1005,6 +1012,27 @@ function aiChooseAction(
     const moveChoices = evaluateMoveOption(mon, sideIndex, opponents, allies, moveName, field, state);
     allChoices.push(...moveChoices);
   }
+  
+  // Filter out priority moves that would be completely blocked by Armor Tail
+  const filteredChoices = allChoices.filter(choice => {
+    if (choice.targetSlot < 0) return true; // Self/ally/field targeting moves are not blocked
+    const move = getMove(choice.moveName);
+    if (!move) return true;
+    let effectivePriority = move.priority;
+    if (mon.ability === "Prankster" && move.category === "status") effectivePriority += 1;
+    if (mon.ability === "Gale Wings" && move.type === "flying" && mon.currentHP === mon.maxHP) effectivePriority += 1;
+    if (effectivePriority <= 0) return true;
+    const target = opponents[choice.targetSlot];
+    if (!target || target.isFainted) return true;
+    // Spread moves are blocked if ANY opponent has Armor Tail
+    if (isSpreadMove(move)) {
+      return !opponents.some(o => o && !o.isFainted && o.ability === "Armor Tail");
+    }
+    // Single-target moves are blocked only if the target has Armor Tail
+    return target.ability !== "Armor Tail";
+  });
+  allChoices.length = 0;
+  allChoices.push(...filteredChoices);
   
   if (allChoices.length === 0) {
     // Choice-locked into unusable move (e.g. Fake Out after turn 1) → switch out
@@ -1611,13 +1639,21 @@ function executeMove(
   user.spreadMissed = [];
   user.spreadImmune = [];
 
-  // Armor Tail: blocks priority moves from opponents
+  // Armor Tail: blocks priority moves from opponents that target the opponent's side
   const movePriority = move.priority +
     (user.ability === "Prankster" && move.category === "status" ? 1 : 0) +
     (user.ability === "Gale Wings" && move.type === "flying" && user.currentHP === user.maxHP ? 1 : 0);
-  if (movePriority > 0 && opponents.some(o => o && !o.isFainted && o.ability === "Armor Tail")) {
-    user.lastMoveImmune = true;
-    return; // Move fails entirely
+  if (movePriority > 0) {
+    const moveTargetsOppSide =
+      move.target === "allAdjacentFoes" ||
+      move.target === "allAdjacent" ||
+      move.target === "foeSide" ||
+      move.target === "all" ||
+      (move.target === "normal" && target && opponents.some(o => o && o === target));
+    if (moveTargetsOppSide && opponents.some(o => o && !o.isFainted && o.ability === "Armor Tail")) {
+      user.lastMoveImmune = true;
+      return; // Move fails entirely
+    }
   }
 
     for (const t of targets) {
@@ -2401,9 +2437,19 @@ export function simulateBattle(
 
       // Armor Tail: block priority moves targeting the side with Armor Tail
       if (!action.switchOut && action.priority > 0) {
-        const targetSide = action.sideIndex === 1 ? state.active2 : state.active1;
-        const hasArmorTail = targetSide.some(p => p && !p.isFainted && p.ability === "Armor Tail");
-        if (hasArmorTail) continue; // Priority move blocked
+        const move = getMove(action.moveName);
+        const targetsOppSide = move && (
+          move.target === "allAdjacentFoes" ||
+          move.target === "allAdjacent" ||
+          move.target === "foeSide" ||
+          move.target === "all" ||
+          (move.target === "normal" && action.targetSlot >= 0)
+        );
+        if (targetsOppSide) {
+          const targetSide = action.sideIndex === 1 ? state.active2 : state.active1;
+          const hasArmorTail = targetSide.some(p => p && !p.isFainted && p.ability === "Armor Tail");
+          if (hasArmorTail) continue; // Priority move blocked
+        }
       }
 
       // Handle switch-out actions
@@ -2820,11 +2866,21 @@ export function simulateBattleWithLog(
 
       // Armor Tail: block priority moves targeting the side with Armor Tail
       if (!action.switchOut && action.priority > 0) {
-        const targetSide = action.sideIndex === 1 ? state.active2 : state.active1;
-        const armorTailMon = targetSide.find(p => p && !p.isFainted && p.ability === "Armor Tail");
-        if (armorTailMon) {
-          turnEvents.push(`${action.mon.pokemon.name} used ${action.moveName} - but ${armorTailMon.pokemon.name}'s Armor Tail blocked it!`);
-          continue;
+        const move = getMove(action.moveName);
+        const targetsOppSide = move && (
+          move.target === "allAdjacentFoes" ||
+          move.target === "allAdjacent" ||
+          move.target === "foeSide" ||
+          move.target === "all" ||
+          (move.target === "normal" && action.targetSlot >= 0)
+        );
+        if (targetsOppSide) {
+          const targetSide = action.sideIndex === 1 ? state.active2 : state.active1;
+          const armorTailMon = targetSide.find(p => p && !p.isFainted && p.ability === "Armor Tail");
+          if (armorTailMon) {
+            turnEvents.push(`${action.mon.pokemon.name} used ${action.moveName} - but ${armorTailMon.pokemon.name}'s Armor Tail blocked it!`);
+            continue;
+          }
         }
       }
 

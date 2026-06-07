@@ -12,6 +12,14 @@ interface ChangelogEntry {
 
   const SHARED_ENTRIES: ChangelogEntry[] = [
     {
+      date: "07/06/2026",
+      items: [
+        "🛡️ Fixed Armor Tail blocking ALL priority moves — now only blocks moves that actually target the Armor Tail side (single-target opponent moves, spread moves, foeSide, and all-field moves). Self-targeting, ally-targeting, and own-side moves like Helping Hand, Follow Me, Rage Powder, Tailwind, Protect, and Quick Guard are no longer incorrectly blocked",
+        "🤖 AI no longer wastes turns on priority moves blocked by Armor Tail — the battle sim AI now filters out doomed priority choices (Fake Out, Aqua Jet, Sucker Punch, Prankster status moves, etc.) when the target has Armor Tail or the move is a spread move hitting an Armor Tail side",
+        "🏆 Refreshed tournament data from Limitless TCG — synced 354 tournaments (20,344 teams, 2,816 top-8 teams). Meta now reflects the latest Regulation M-A tournament results through early June 2026",
+      ],
+    },
+    {
       date: "27/05/2026",
       items: [
         "😈 Fixed Mega Absol 'never attacking' — increased smart-pick priority for Mega Evolution Pokémon (+18 up from +10) so they're less likely to be benched. Added penalty for switching out megas (−22). Battle Bot replay now shows ALL 6 selected Pokémon with benched ones dimmed and crossed out, so you can see which mons didn't make the cut",
