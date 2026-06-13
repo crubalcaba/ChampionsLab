@@ -6,6 +6,7 @@ import Image from "next/image";
 import {
   Heart, Code, Users, Mail, Send, ImagePlus, X, CheckCircle2,
   AlertCircle, Loader2, Code2, Globe, Sparkles, Coffee, ChevronRight,
+  Shield,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { trackEvent } from "@/lib/analytics";
@@ -252,6 +253,20 @@ export default function AboutPage() {
             <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" /></svg>
             @ChampionsLabXYZ
           </a>
+        </div>
+
+        {/* Legal & Disclaimers */}
+        <div className="glass rounded-2xl p-6 border border-amber-200/80 dark:border-amber-500/30 bg-gradient-to-br from-amber-50/60 to-orange-50/60 dark:from-amber-950/60 dark:to-orange-950/60">
+          <div className="flex items-center gap-3 mb-4">
+            <Shield className="w-5 h-5 text-amber-600 dark:text-amber-400" />
+            <h2 className="text-lg font-bold text-amber-900 dark:text-amber-200">{t("about.legalTitle")}</h2>
+          </div>
+          <div className="space-y-3 text-sm text-amber-800/90 dark:text-amber-300/90 leading-relaxed">
+            <p dangerouslySetInnerHTML={{ __html: t("about.legal.unofficial") }} />
+            <p dangerouslySetInnerHTML={{ __html: t("about.legal.ip") }} />
+            <p dangerouslySetInnerHTML={{ __html: t("about.legal.noAffiliation") }} />
+            <p dangerouslySetInnerHTML={{ __html: t("about.legal.privacyTerms") }} />
+          </div>
         </div>
 
         {/* Contact Form */}

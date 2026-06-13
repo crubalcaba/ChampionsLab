@@ -10,7 +10,9 @@
     "supportUs": "Unterstütze uns",
     "shop": "Shop",
     "language": "Sprache",
-    "subtitle": "Werde Champion"
+    "subtitle": "Werde Champion",
+    "privacy": "Privacy",
+    "terms": "Terms"
   },
   "common": {
     "search": "Suchen",
@@ -1075,6 +1077,13 @@
       "networkError": "Netzwerkfehler. Bitte versuche es erneut.",
       "sending": "Wird gesendet…",
       "send": "Nachricht senden"
+    },
+    "legalTitle": "Legal & Disclaimers",
+    "legal": {
+      "unofficial": "<strong>Champions Lab is an unofficial fan project.</strong> It is not affiliated with, endorsed by, sponsored by, or approved by Nintendo, The Pokémon Company International, Game Freak Inc., or Creatures Inc.",
+      "ip": "Pokémon, Pokémon character names, Nintendo Switch, and related marks are trademarks of Nintendo, The Pokémon Company International, Game Freak Inc., and/or Creatures Inc. All rights to those marks and to Pokémon game data, sprites, artwork, and other materials belong to their respective owners.",
+      "noAffiliation": "This project is provided free of charge by fans, for fans. No revenue from Champions Lab is derived from the sale of Pokémon intellectual property.",
+      "privacyTerms": "For more information, please read our <a href=\"/privacy\" class=\"font-semibold text-amber-700 dark:text-amber-300 hover:underline\">Privacy Policy</a> and <a href=\"/terms\" class=\"font-semibold text-amber-700 dark:text-amber-300 hover:underline\">Terms of Service</a>."
     }
   },
   "events": {
@@ -1303,5 +1312,17 @@
     "copyPaste": "Paste kopieren",
     "footer": "Erstellt mit Champions Lab",
     "openInBuilder": "Im Team-Builder öffnen"
+  },
+  "footer": {
+    "disclaimer": "Champions Lab is an unofficial fan project and is not affiliated with, endorsed by, or sponsored by Nintendo, The Pokémon Company International, Game Freak Inc., or Creatures Inc. Pokémon and Pokémon character names are trademarks of Nintendo.",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service",
+    "cookieSettings": "Cookie Settings"
+  },
+  "cookieConsent": {
+    "title": "Cookie Consent",
+    "description": "We use cookies to remember your preferences and Google Analytics to understand how the site is used. You can accept or decline analytics cookies.",
+    "accept": "Accept",
+    "decline": "Decline"
   }
 }

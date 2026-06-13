@@ -12,6 +12,14 @@ interface ChangelogEntry {
 
   const SHARED_ENTRIES: ChangelogEntry[] = [
     {
+      date: "13/06/2026",
+      items: [
+        "🛡️ Added Privacy Policy and Terms of Service pages — legal pages now linked in the footer and About page",
+        "🍪 Added cookie consent banner — EU/UK/California visitors are now asked for consent before loading Google Analytics; everyone can manage consent via the footer",
+        "⚠️ Added official unofficial fan-project disclaimers — About page and footer now clearly state that Champions Lab is not affiliated with Nintendo, The Pokémon Company, Game Freak, or Creatures Inc.",
+      ],
+    },
+    {
       date: "07/06/2026",
       items: [
         "🛡️ Fixed Armor Tail blocking ALL priority moves — now only blocks moves that actually target the Armor Tail side (single-target opponent moves, spread moves, foeSide, and all-field moves). Self-targeting, ally-targeting, and own-side moves like Helping Hand, Follow Me, Rage Powder, Tailwind, Protect, and Quick Guard are no longer incorrectly blocked",

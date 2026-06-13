@@ -2,13 +2,14 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import { cookies } from "next/headers";
 import { Inter, JetBrains_Mono, Sora } from "next/font/google";
-import Script from "next/script";
 import "./globals.css";
 import { Navbar } from "@/components/navbar";
+import { Footer } from "@/components/footer";
 import { LazyParticles } from "@/components/lazy-particles";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { ThemeInit } from "@/components/theme-init";
 import { MobileNavInit } from "@/components/mobile-nav-init";
+import { CookieConsent } from "@/components/cookie-consent";
 import { I18nProvider } from "@/lib/i18n";
 
 const inter = Inter({
@@ -92,23 +93,11 @@ export default async function RootLayout({
       style={{ colorScheme: isDark ? "dark" : "light" }}
       suppressHydrationWarning
     >
-      <head>
-        <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-NVYVM8YJZN"
-          strategy="afterInteractive"
-        />
-        <Script id="google-analytics" strategy="afterInteractive">
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'G-NVYVM8YJZN');
-          `}
-        </Script>
-      </head>
+      <head />
       <body className="min-h-full flex flex-col bg-background text-foreground">
         <I18nProvider initialLocale={initialLocale}>
         <LazyParticles />
+        <CookieConsent />
         {/* Pure HTML hamburger  -  works instantly, no React hydration needed */}
         <button
           id="mobile-nav-toggle"
@@ -129,6 +118,7 @@ export default async function RootLayout({
         <Suspense>
           <main className="flex-1 relative z-10">{children}</main>
         </Suspense>
+        <Footer />
         <ThemeToggle />
         </I18nProvider>
       </body>
