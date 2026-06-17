@@ -14,6 +14,12 @@ interface ChangelogEntry {
     {
       date: "17/06/2026",
       items: [
+        "🐾 Unhid Grimmsnarl, Metagross, and Mega Metagross — they now appear in the Pokédex and Team Builder for Regulation M-B",
+      ],
+    },
+    {
+      date: "17/06/2026",
+      items: [
         "🏆 Refreshed tournament data from Limitless TCG — synced 470 Regulation M-A tournaments (~21,800 teams), updated meta usage rankings and top-cut teams through mid-June 2026",
       ],
     },

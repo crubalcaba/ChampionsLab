@@ -8945,7 +8945,7 @@ export const POKEMON_SEED: ChampionsPokemon[] = [
   "id": 376,
   "name": "Metagross",
   "dexNumber": 376,
-  "hidden": true,
+  "hidden": false,
   "types": [ "steel", "psychic" ],
   "baseStats": { "hp": 80, "attack": 135, "defense": 130, "spAtk": 95, "spDef": 90, "speed": 70 },
   "abilities": [
@@ -18980,7 +18980,7 @@ export const POKEMON_SEED: ChampionsPokemon[] = [
   "id": 861,
   "name": "Grimmsnarl",
   "dexNumber": 861,
-  "hidden": true,
+  "hidden": false,
   "types": [ "dark", "fairy" ],
   "baseStats": { "hp": 95, "attack": 120, "defense": 65, "spAtk": 95, "spDef": 75, "speed": 60 },
   "abilities": [
