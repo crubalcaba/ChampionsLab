@@ -14,6 +14,12 @@ interface ChangelogEntry {
     {
       date: "17/06/2026",
       items: [
+        "💎 Added missing Mawilite mega stone to the item list",
+      ],
+    },
+    {
+      date: "17/06/2026",
+      items: [
         "🐾 Unhid Grimmsnarl, Metagross, and Mega Metagross — they now appear in the Pokédex and Team Builder for Regulation M-B",
       ],
     },
