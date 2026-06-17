@@ -128,6 +128,7 @@ export interface Season {
   name: string;
   startDate: string;
   endDate?: string;
+  regulationEnd?: string;
   rosterAdditions: number[];
   rules: string[];
   isActive: boolean;

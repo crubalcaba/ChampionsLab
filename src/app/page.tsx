@@ -5,7 +5,7 @@ import { motion } from "@/lib/motion";
 import Image from "next/image";
 import { LastUpdated } from "@/components/last-updated";
 import { Search, SlidersHorizontal, Sparkles, ChevronDown } from "lucide-react";
-import { getPokemonBySeason } from "@/lib/pokemon-data";
+import { getPokemonBySeason, SEASONS } from "@/lib/pokemon-data";
 import { PokemonType, ChampionsPokemon } from "@/lib/types";
 import { PokemonCard } from "@/components/pokemon-card";
 import { PokemonDetailModal } from "@/components/pokemon-detail-modal";
@@ -46,7 +46,7 @@ type StatFilters = typeof EMPTY_STAT_FILTERS;
 function getBST(p: ChampionsPokemon) { return p.baseStats.hp + p.baseStats.attack + p.baseStats.defense + p.baseStats.spAtk + p.baseStats.spDef + p.baseStats.speed; }
 
 export default function HomePage() {
-  const [activeSeason, setActiveSeason] = useState(1);
+  const [activeSeason, setActiveSeason] = useState(() => SEASONS.find((s) => s.isActive)?.id ?? SEASONS[0]?.id ?? 1);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedTypes, setSelectedTypes] = useState<PokemonType[]>([]);
   const [selectedGens, setSelectedGens] = useState<number[]>([]);
@@ -205,7 +205,7 @@ export default function HomePage() {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.12, duration: 0.25 }}
         >
-          {t("pokedex.description", { count: getPokemonBySeason(1).length })}
+          {t("pokedex.description", { count: getPokemonBySeason(activeSeason).length })}
         </motion.p>
 
         {/* Engine Promotion Banner */}

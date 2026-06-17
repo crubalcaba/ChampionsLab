@@ -12,6 +12,37 @@ interface ChangelogEntry {
 
   const SHARED_ENTRIES: ChangelogEntry[] = [
     {
+      date: "17/06/2026",
+      items: [
+        "🖼️ Uploaded all missing sprites to Hetzner Object Storage — 59 new sprite files including the 22 Regulation M-B base Pokémon, 34 Champions mega forms, 4 official mega forms, and Mega Meowstic official art",
+        "🛡️ Fixed ability descriptions and flags across the full roster — every ability now has a proper description pulled from the battle engine and the correct Champions/existing flag (Mega Raichu X/Y, Mega Clefable, etc. no longer show empty text)",
+        "➕ Added 18 missing battle-engine abilities used by mega forms: Electric Surge, Aerilate, Pixilate, Refrigerate, Huge Power, Pure Power, Speed Boost, Skill Link, No Guard, Filter, Magic Bounce, Shadow Tag, Berserk, Trace, Infiltrator, Stalwart, Innards Out, and Healer",
+      ],
+    },
+    {
+      date: "17/06/2026",
+      items: [
+        "🗓️ Added Season M-3 / Regulation M-B — active from June 17th through July 8th, with the Regulation running until September 2nd",
+        "✅ Validated all 38 Regulation M-B roster additions against Serebii's Regulation M-B page — including Mega Raichu X/Y, Vileplume, Sceptile/Blaziken/Swampert/Mawile mega lines, and the new Champions megas",
+        "➕ Added missing official Mega forms for Sceptile, Blaziken, Swampert, and Mawile to complete their Regulation M-B entries",
+        "🔧 Regulation end date is now stored per-season and displayed dynamically in the season info card",
+      ],
+    },
+    {
+      date: "17/06/2026",
+      items: [
+        "🐾 Restored 22 missing base Pokémon to the Season 1 roster — Annihilape, Barbaracle, Blaziken, Dragalge, Eelektross, Falinks, Gholdengo, Houndstone, Malamar, Mawile, Musharna, Overqwil, Qwilfish, Sceptile, Scolipede, Scrafty, Staraptor, Swampert, Vileplume, Pyroar, Basculegion, and Meowstic are back with full stats, abilities, and learnsets",
+        "✨ Added 34 Mega Evolution forms from Serebii's Champions mega abilities list — including new megas for Raichu X/Y, Clefable, Victreebel, Starmie, Meganium, Feraligatr, Skarmory, Chimecho, Froslass, Emboar, Excadrill, Scolipede, Scrafty, Eelektross, Chandelure, Golurk, Chesnaught, Delphox, Greninja, Pyroar, Floette, Meowstic, Malamar, Barbaracle, Dragalge, Hawlucha, Crabominable, Drampa, Falinks, Scovillain, and Glimmora",
+        "🛡️ Updated Champions-exclusive ability descriptions for Mega Sol, Piercing Drill, and Spicy Spray to match Serebii's latest ability text",
+      ],
+    },
+    {
+      date: "17/06/2026",
+      items: [
+        "📦 Added 205 missing competitive moves to the Battle Engine — every move on Serebii's Pokémon Champions available-moves list now has a complete entry in MOVE_DATA with type, category, power, accuracy, targeting, flags, and effects",
+      ],
+    },
+    {
       date: "13/06/2026",
       items: [
         "🛡️ Added Privacy Policy and Terms of Service pages — legal pages now linked in the footer and About page",

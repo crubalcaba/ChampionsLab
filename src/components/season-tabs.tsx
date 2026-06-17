@@ -196,7 +196,7 @@ export function SeasonInfo({ seasonId }: { seasonId: number }) {
       { month: "long", day: "numeric", year: "numeric" }
     );
 
-  const regulationEnd = "2026-06-17";
+  const regulationEnd = season.regulationEnd ?? season.endDate;
 
   return (
     <motion.div
@@ -236,7 +236,7 @@ export function SeasonInfo({ seasonId }: { seasonId: number }) {
           <Calendar className="w-3.5 h-3.5 text-muted-foreground flex-shrink-0" />
           <div>
             <p className="text-[10px] text-muted-foreground font-medium uppercase tracking-wider">{t('season.regulationUntil')}</p>
-            <p className="text-xs font-semibold text-foreground">{formatDate(regulationEnd)}</p>
+            <p className="text-xs font-semibold text-foreground">{regulationEnd ? formatDate(regulationEnd) : "TBD"}</p>
           </div>
         </div>
         <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-gray-50 dark:bg-white/5 ring-1 ring-gray-100 dark:ring-gray-200/10">

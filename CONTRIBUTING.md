@@ -186,6 +186,25 @@ We hang out on Discord and through GitHub Discussions. If you have questions:
 
 ---
 
+## 🗃️ Data Contributions
+
+If you are adding or updating Pokémon, moves, abilities, or items, read `DATA_AND_SCRIPTS.md` first. The most common mistake is adding data to the raw files without adding it to the **valid list** that the UI and engine actually use.
+
+### Quick rules
+
+- **Pokémon** — add to `POKEMON_SEED` in `src/lib/pokemon-data.ts`. Set `hidden: true` to keep it out of the UI.
+- **Moves** — a move is valid only if it appears in a Pokémon's `moves` array. The engine needs it in `MOVE_DATA` (`src/lib/engine/move-data.ts`).
+  - Add to `MOVE_DATA`.
+  - Add to at least one Pokémon's `moves` array.
+  - Do not add moves only to `MOVE_DATA`; they will be orphaned.
+- **Items** — an item is selectable only if it is in `CHAMPIONS_ITEMS` **or** has `isMegaStone: true` in `src/lib/engine/items.ts`.
+  - Add the entry to `ITEMS`.
+  - Add the name to `CHAMPIONS_ITEMS`, or mark it `isMegaStone: true`.
+  - For Mega Stones, set `forPokemon` to a Pokémon that exists in `POKEMON_SEED`.
+- **Abilities** — add to `src/lib/engine/ability-data.ts` and to the relevant Pokémon's `abilities` array.
+
+After data changes, run the audits and build (`npm run build`) and update the changelog in `src/components/last-updated.tsx`.
+
 ## License
 
 By contributing to Champions Lab, you agree that your contributions will be licensed under the same [MIT License](LICENSE) as the project.

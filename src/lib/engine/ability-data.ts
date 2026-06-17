@@ -431,6 +431,104 @@ export const ABILITY_DATA: Record<string, AbilityEffect> = {
     priorityBoost: { type: "flying", priority: 1 }, vgcRelevance: 7,
   },
 
+  // ── TERRAIN SETTERS ────────────────────────────────────────────────────────
+  "Electric Surge": {
+    name: "Electric Surge", category: "terrain",
+    description: "Turns the ground into Electric Terrain when the Pokémon enters battle.",
+    setsTerrain: "electric", vgcRelevance: 9,
+  },
+
+  // ── OFFENSIVE ABILITIES ────────────────────────────────────────────────────
+  "Aerilate": {
+    name: "Aerilate", category: "offensive",
+    description: "Normal-type moves become Flying-type moves and their power is boosted.",
+    vgcRelevance: 7,
+  },
+  "Pixilate": {
+    name: "Pixilate", category: "offensive",
+    description: "Normal-type moves become Fairy-type moves and their power is boosted.",
+    vgcRelevance: 8,
+  },
+  "Refrigerate": {
+    name: "Refrigerate", category: "offensive",
+    description: "Normal-type moves become Ice-type moves and their power is boosted.",
+    vgcRelevance: 6,
+  },
+  "Huge Power": {
+    name: "Huge Power", category: "offensive",
+    description: "Doubles the Pokémon's Attack stat.",
+    statMultiplier: { attack: 2 }, vgcRelevance: 9,
+  },
+  "Pure Power": {
+    name: "Pure Power", category: "offensive",
+    description: "Doubles the Pokémon's Attack stat.",
+    statMultiplier: { attack: 2 }, vgcRelevance: 9,
+  },
+  "Speed Boost": {
+    name: "Speed Boost", category: "offensive",
+    description: "Gradually boosts the Pokémon's Speed stat.",
+    vgcRelevance: 8,
+  },
+  "Skill Link": {
+    name: "Skill Link", category: "offensive",
+    description: "Increases the frequency of multi-strike moves.",
+    vgcRelevance: 7,
+  },
+  "No Guard": {
+    name: "No Guard", category: "offensive",
+    description: "Ensures the Pokémon's and its foe's attacks land.",
+    vgcRelevance: 6,
+  },
+
+  // ── DEFENSIVE ABILITIES ────────────────────────────────────────────────────
+  "Filter": {
+    name: "Filter", category: "defensive",
+    description: "Powers down super-effective moves.",
+    vgcRelevance: 8,
+  },
+  "Magic Bounce": {
+    name: "Magic Bounce", category: "defensive",
+    description: "Reflects status-changing moves back at their user.",
+    vgcRelevance: 9,
+  },
+  "Shadow Tag": {
+    name: "Shadow Tag", category: "defensive",
+    description: "Prevents the foe's escape.",
+    vgcRelevance: 8,
+  },
+  "Berserk": {
+    name: "Berserk", category: "defensive",
+    description: "Boosts the Pokémon's Sp. Atk stat when it takes a hit that causes its HP to become half or less.",
+    vgcRelevance: 6,
+  },
+
+  // ── UTILITY ABILITIES ──────────────────────────────────────────────────────
+  "Trace": {
+    name: "Trace", category: "utility",
+    description: "Copies an opponent's ability upon entering battle.",
+    vgcRelevance: 6,
+  },
+  "Infiltrator": {
+    name: "Infiltrator", category: "utility",
+    description: "Passes through the foe's barrier and strikes.",
+    vgcRelevance: 6,
+  },
+  "Stalwart": {
+    name: "Stalwart", category: "utility",
+    description: "Ignores the effects of opposing Pokémon's Abilities and moves that draw in moves.",
+    vgcRelevance: 7,
+  },
+  "Innards Out": {
+    name: "Innards Out", category: "utility",
+    description: "Damages the attacker landing the finishing hit by the amount equal to its last HP.",
+    vgcRelevance: 5,
+  },
+  "Healer": {
+    name: "Healer", category: "utility",
+    description: "May heal an ally's status conditions.",
+    vgcRelevance: 4,
+  },
+
   // ── CHAMPIONS-EXCLUSIVE ABILITIES ──────────────────────────────────────────
   "Aura Maximizer": {
     name: "Aura Maximizer", category: "champions",
@@ -449,7 +547,7 @@ export const ABILITY_DATA: Record<string, AbilityEffect> = {
   },
   "Piercing Drill": {
     name: "Piercing Drill", category: "champions",
-    description: "When the Pokémon uses contact moves, it can hit even targets that are protecting themselves, dealing 1/4 of the damage that the move would otherwise deal. Everything aside from the target's protective effects is still triggered.",
+    description: "The Pokémon's Ground- and Steel-type moves ignore the target's stat changes and abilities that would negate them.",
     vgcRelevance: 9,
   },
   "Unseen Fist": {
@@ -524,7 +622,7 @@ export const ABILITY_DATA: Record<string, AbilityEffect> = {
   },
   "Spicy Spray": {
     name: "Spicy Spray", category: "champions",
-    description: "When the Pokémon takes damage from a move, it burns the attacker.",
+    description: "When the Pokémon uses a Grass- or Fire-type move, it may leave the target with a burn.",
     vgcRelevance: 9,
   },
   "Supreme Commander": {
@@ -534,7 +632,8 @@ export const ABILITY_DATA: Record<string, AbilityEffect> = {
   },
   "Mega Sol": {
     name: "Mega Sol", category: "champions",
-    description: "Even when the sunlight has not turned harsh, the Pokémon can use its moves as if the weather were harsh sunlight.",
+    description: "Boosts the power of the Pokémon's Fire-type moves by 50% and its Grass-type moves by 50% in harsh sunlight.",
+    typeBoost: { type: "fire", multiplier: 1.5 },
     personalWeather: "sun",
     vgcRelevance: 9,
   },
@@ -598,6 +697,20 @@ export const ABILITY_DATA: Record<string, AbilityEffect> = {
     description: "Blocks the first hit of battle damage, then takes 1/8 max HP recoil when the disguise breaks.",
     vgcRelevance: 10,
   },
+  // ── CHAMPIONS NEW ABILITIES ──────────────────────────────────────────────────
+  "Eelevate": {
+    name: "Eelevate", category: "champions",
+    description: "The Pokemon floats off the ground, making it immune to Ground-type moves, Spikes, Toxic Spikes, and Sticky Web. When the Pokemon knocks out a target with an attack, its highest stat is boosted by 1 stage.",
+    typeImmunity: "ground",
+    vgcRelevance: 8,
+  },
+  "Fire Mane": {
+    name: "Fire Mane", category: "champions",
+    description: "Boosts the power of the Pokemon's Fire-type moves by 50%.",
+    typeBoost: { type: "fire", multiplier: 1.5 },
+    vgcRelevance: 8,
+  },
+
 };
 
 /** Lookup ability effect */
