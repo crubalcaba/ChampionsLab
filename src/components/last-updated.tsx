@@ -14,6 +14,12 @@ interface ChangelogEntry {
     {
       date: "17/06/2026",
       items: [
+        "🏆 Refreshed tournament data from Limitless TCG — synced 470 Regulation M-A tournaments (~21,800 teams), updated meta usage rankings and top-cut teams through mid-June 2026",
+      ],
+    },
+    {
+      date: "17/06/2026",
+      items: [
         "🌐 Added Monthly Challenge Series June 2026 online competition — Regulation M-B Single Battle, June 26–29, rewards Tyranitar, 100 Quick Coupons, and the MCS 06/2026 Challenger title for 3+ battles",
       ],
     },
