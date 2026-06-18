@@ -14,6 +14,12 @@ interface ChangelogEntry {
     {
       date: "18/06/2026",
       items: [
+        "🤖 Re-ran battle-bot training with corrected stats — 2,000,000 simulated battles, 861 teams, 272 Pokémon, refreshed ELO rankings, counters, and archetype insights",
+      ],
+    },
+    {
+      date: "18/06/2026",
+      items: [
         "✅ Validated every active Pokémon/Form base stat against Serebii's Pokémon Champions section — fixed 33 incorrect stat spreads including Mega Eelektross, Mega Delphox, all Mega Raichu forms, and Floette (now Eternal Floette)",
       ],
     },
