@@ -783,7 +783,7 @@ export const POKEMON_SEED: ChampionsPokemon[] = [
     "name": "Mega Raichu X",
     "sprite": "/sprites/26mx.png",
     "types": [ "electric" ],
-    "baseStats": { "hp": 70, "attack": 130, "defense": 75, "spAtk": 100, "spDef": 100, "speed": 110 },
+    "baseStats": { "hp": 60, "attack": 135, "defense": 95, "spAtk": 90, "spDef": 95, "speed": 110 },
     "abilities": [
           { "name": "Electric Surge", "description": "Turns the ground into Electric Terrain when the Pokémon enters battle.", "isChampions": false }
         ],
@@ -793,7 +793,7 @@ export const POKEMON_SEED: ChampionsPokemon[] = [
     "name": "Mega Raichu Y",
     "sprite": "/sprites/26my.png",
     "types": [ "electric" ],
-    "baseStats": { "hp": 70, "attack": 130, "defense": 75, "spAtk": 100, "spDef": 100, "speed": 110 },
+    "baseStats": { "hp": 60, "attack": 100, "defense": 55, "spAtk": 160, "spDef": 80, "speed": 130 },
     "abilities": [
           { "name": "No Guard", "description": "Ensures the Pokémon's and its foe's attacks land.", "isChampions": false }
         ],
@@ -1657,7 +1657,7 @@ export const POKEMON_SEED: ChampionsPokemon[] = [
     "name": "Mega Chimecho",
     "sprite": "/sprites/358m.png",
     "types": [ "psychic", "steel" ],
-    "baseStats": { "hp": 85, "attack": 60, "defense": 100, "spAtk": 135, "spDef": 110, "speed": 65 },
+    "baseStats": { "hp": 75, "attack": 50, "defense": 110, "spAtk": 135, "spDef": 120, "speed": 65 },
     "abilities": [
           { "name": "Levitate", "description": "Immune to Ground-type moves.", "isChampions": false }
         ],
@@ -4169,7 +4169,7 @@ export const POKEMON_SEED: ChampionsPokemon[] = [
     "name": "Mega Clefable",
     "sprite": "/sprites/36m.png",
     "types": [ "fairy", "flying" ],
-    "baseStats": { "hp": 105, "attack": 80, "defense": 93, "spAtk": 135, "spDef": 110, "speed": 60 },
+    "baseStats": { "hp": 95, "attack": 80, "defense": 93, "spAtk": 135, "spDef": 110, "speed": 70 },
     "abilities": [
           { "name": "Magic Bounce", "description": "Reflects status-changing moves back at their user.", "isChampions": false }
         ],
@@ -4709,7 +4709,7 @@ export const POKEMON_SEED: ChampionsPokemon[] = [
     "name": "Mega Victreebel",
     "sprite": "/sprites/71m.png",
     "types": [ "grass", "poison" ],
-    "baseStats": { "hp": 90, "attack": 145, "defense": 85, "spAtk": 110, "spDef": 90, "speed": 70 },
+    "baseStats": { "hp": 80, "attack": 125, "defense": 85, "spAtk": 135, "spDef": 95, "speed": 70 },
     "abilities": [
           { "name": "Innards Out", "description": "Damages the attacker landing the finishing hit by the amount equal to its last HP.", "isChampions": false }
         ],
@@ -5250,7 +5250,7 @@ export const POKEMON_SEED: ChampionsPokemon[] = [
     "name": "Mega Starmie",
     "sprite": "/sprites/121m.png",
     "types": [ "water", "psychic" ],
-    "baseStats": { "hp": 70, "attack": 85, "defense": 105, "spAtk": 140, "spDef": 105, "speed": 115 },
+    "baseStats": { "hp": 60, "attack": 100, "defense": 105, "spAtk": 130, "spDef": 105, "speed": 120 },
     "abilities": [
           { "name": "Huge Power", "description": "Doubles the Pokémon's Attack stat.", "isChampions": false }
         ],
@@ -6349,7 +6349,7 @@ export const POKEMON_SEED: ChampionsPokemon[] = [
     "name": "Mega Dragonite",
     "sprite": "/sprites/149m.png",
     "types": [ "dragon", "flying" ],
-    "baseStats": { "hp": 101, "attack": 174, "defense": 115, "spAtk": 110, "spDef": 120, "speed": 80 },
+    "baseStats": { "hp": 91, "attack": 124, "defense": 115, "spAtk": 145, "spDef": 125, "speed": 100 },
     "abilities": [
           { "name": "Multiscale", "description": "Halves damage taken when HP is full.", "isChampions": false }
         ],
@@ -6446,7 +6446,7 @@ export const POKEMON_SEED: ChampionsPokemon[] = [
     "name": "Mega Meganium",
     "sprite": "/sprites/154m.png",
     "types": [ "grass", "fairy" ],
-    "baseStats": { "hp": 90, "attack": 92, "defense": 120, "spAtk": 123, "spDef": 120, "speed": 80 },
+    "baseStats": { "hp": 80, "attack": 92, "defense": 115, "spAtk": 143, "spDef": 115, "speed": 80 },
     "abilities": [
           { "name": "Mega Sol", "description": "Boosts the power of the Pokémon's Fire-type moves by 50% and its Grass-type moves by 50% in harsh sunlight.", "isChampions": true }
         ],
@@ -6742,7 +6742,7 @@ export const POKEMON_SEED: ChampionsPokemon[] = [
     "name": "Mega Feraligatr",
     "sprite": "/sprites/160m.png",
     "types": [ "water", "dragon" ],
-    "baseStats": { "hp": 95, "attack": 145, "defense": 120, "spAtk": 89, "spDef": 103, "speed": 78 },
+    "baseStats": { "hp": 85, "attack": 160, "defense": 125, "spAtk": 89, "spDef": 93, "speed": 78 },
     "abilities": [
           { "name": "Dragonize", "description": "The Pokémon's Normal-type moves become Dragon-type moves and their power is boosted by 20%.", "isChampions": true }
         ],
@@ -7825,7 +7825,7 @@ export const POKEMON_SEED: ChampionsPokemon[] = [
     "name": "Mega Skarmory",
     "sprite": "/sprites/227m.png",
     "types": [ "steel", "flying" ],
-    "baseStats": { "hp": 75, "attack": 120, "defense": 160, "spAtk": 50, "spDef": 90, "speed": 70 },
+    "baseStats": { "hp": 65, "attack": 140, "defense": 110, "spAtk": 40, "spDef": 100, "speed": 110 },
     "abilities": [
           { "name": "Stalwart", "description": "Ignores the effects of opposing Pokémon's Abilities and moves that draw in moves.", "isChampions": false }
         ],
@@ -10664,7 +10664,7 @@ export const POKEMON_SEED: ChampionsPokemon[] = [
     "name": "Mega Froslass",
     "sprite": "/sprites/478m.png",
     "types": [ "ice", "ghost" ],
-    "baseStats": { "hp": 80, "attack": 120, "defense": 90, "spAtk": 90, "spDef": 90, "speed": 110 },
+    "baseStats": { "hp": 70, "attack": 80, "defense": 70, "spAtk": 140, "spDef": 100, "speed": 120 },
     "abilities": [
           { "name": "Snow Warning", "description": "Summons snow/hail on switch-in.", "isChampions": false }
         ],
@@ -11255,7 +11255,7 @@ export const POKEMON_SEED: ChampionsPokemon[] = [
     "name": "Mega Emboar",
     "sprite": "/sprites/500m.png",
     "types": [ "fire", "fighting" ],
-    "baseStats": { "hp": 120, "attack": 163, "defense": 85, "spAtk": 110, "spDef": 85, "speed": 65 },
+    "baseStats": { "hp": 110, "attack": 148, "defense": 75, "spAtk": 110, "spDef": 110, "speed": 75 },
     "abilities": [
           { "name": "Mold Breaker", "description": "Ignores target's ability when attacking.", "isChampions": false }
         ],
@@ -11521,7 +11521,7 @@ export const POKEMON_SEED: ChampionsPokemon[] = [
     "name": "Mega Excadrill",
     "sprite": "/sprites/530m.png",
     "types": [ "ground", "steel" ],
-    "baseStats": { "hp": 120, "attack": 175, "defense": 80, "spAtk": 60, "spDef": 85, "speed": 88 },
+    "baseStats": { "hp": 110, "attack": 165, "defense": 100, "spAtk": 65, "spDef": 65, "speed": 103 },
     "abilities": [
           { "name": "Piercing Drill", "description": "The Pokémon's Ground- and Steel-type moves ignore the target's stat changes and abilities that would negate them.", "isChampions": true }
         ],
@@ -12562,7 +12562,7 @@ export const POKEMON_SEED: ChampionsPokemon[] = [
     "name": "Mega Golurk",
     "sprite": "/sprites/623m.png",
     "types": [ "ground", "ghost" ],
-    "baseStats": { "hp": 99, "attack": 164, "defense": 100, "spAtk": 65, "spDef": 100, "speed": 55 },
+    "baseStats": { "hp": 89, "attack": 159, "defense": 105, "spAtk": 70, "spDef": 105, "speed": 55 },
     "abilities": [
           { "name": "Unseen Fist", "description": "When the Pokémon uses contact moves, it can hit even targets that are protecting themselves, dealing full damage. Everything aside from the target's protective effects is still triggered.", "isChampions": true }
         ],
@@ -12866,7 +12866,7 @@ export const POKEMON_SEED: ChampionsPokemon[] = [
     "name": "Mega Chesnaught",
     "sprite": "/sprites/652m.png",
     "types": [ "grass", "fighting" ],
-    "baseStats": { "hp": 98, "attack": 147, "defense": 142, "spAtk": 84, "spDef": 95, "speed": 64 },
+    "baseStats": { "hp": 88, "attack": 137, "defense": 172, "spAtk": 74, "spDef": 115, "speed": 44 },
     "abilities": [
           { "name": "Bulletproof", "description": "Immune to ball and bomb moves (Shadow Ball, Sludge Bomb, etc.).", "isChampions": false }
         ],
@@ -12973,7 +12973,7 @@ export const POKEMON_SEED: ChampionsPokemon[] = [
     "name": "Mega Delphox",
     "sprite": "/sprites/655m.png",
     "types": [ "fire", "psychic" ],
-    "baseStats": { "hp": 85, "attack": 79, "defense": 92, "spAtk": 154, "spDef": 120, "speed": 104 },
+    "baseStats": { "hp": 75, "attack": 69, "defense": 72, "spAtk": 159, "spDef": 125, "speed": 134 },
     "abilities": [
           { "name": "Levitate", "description": "Immune to Ground-type moves.", "isChampions": false }
         ],
@@ -13072,7 +13072,7 @@ export const POKEMON_SEED: ChampionsPokemon[] = [
     "name": "Mega Greninja",
     "sprite": "/sprites/658m.png",
     "types": [ "water", "dark" ],
-    "baseStats": { "hp": 82, "attack": 105, "defense": 87, "spAtk": 143, "spDef": 91, "speed": 122 },
+    "baseStats": { "hp": 72, "attack": 125, "defense": 77, "spAtk": 133, "spDef": 81, "speed": 142 },
     "abilities": [
           { "name": "Protean", "description": "Changes type to match the move being used (once per switch-in).", "isChampions": false }
         ],
@@ -14045,7 +14045,7 @@ export const POKEMON_SEED: ChampionsPokemon[] = [
     "name": "Mega Hawlucha",
     "sprite": "/sprites/701m.png",
     "types": [ "fighting", "flying" ],
-    "baseStats": { "hp": 88, "attack": 132, "defense": 95, "spAtk": 84, "spDef": 83, "speed": 118 },
+    "baseStats": { "hp": 78, "attack": 137, "defense": 100, "spAtk": 74, "spDef": 93, "speed": 118 },
     "abilities": [
           { "name": "No Guard", "description": "Ensures the Pokémon's and its foe's attacks land.", "isChampions": false }
         ],
@@ -14832,7 +14832,7 @@ export const POKEMON_SEED: ChampionsPokemon[] = [
     "name": "Mega Crabominable",
     "sprite": "/sprites/740m.png",
     "types": [ "fighting", "ice" ],
-    "baseStats": { "hp": 107, "attack": 172, "defense": 97, "spAtk": 72, "spDef": 87, "speed": 43 },
+    "baseStats": { "hp": 97, "attack": 157, "defense": 122, "spAtk": 62, "spDef": 107, "speed": 33 },
     "abilities": [
           { "name": "Iron Fist", "description": "Punching moves deal 20% more damage.", "isChampions": false }
         ],
@@ -15511,7 +15511,7 @@ export const POKEMON_SEED: ChampionsPokemon[] = [
     "name": "Mega Drampa",
     "sprite": "/sprites/780m.png",
     "types": [ "normal", "dragon" ],
-    "baseStats": { "hp": 88, "attack": 70, "defense": 105, "spAtk": 175, "spDef": 111, "speed": 36 },
+    "baseStats": { "hp": 78, "attack": 85, "defense": 110, "spAtk": 160, "spDef": 116, "speed": 36 },
     "abilities": [
           { "name": "Berserk", "description": "Boosts the Pokémon's Sp. Atk stat when it takes a hit that causes its HP to become half or less.", "isChampions": false }
         ],
@@ -17458,7 +17458,7 @@ export const POKEMON_SEED: ChampionsPokemon[] = [
     "name": "Mega Scovillain",
     "sprite": "/sprites/952m.png",
     "types": [ "grass", "fire" ],
-    "baseStats": { "hp": 75, "attack": 148, "defense": 85, "spAtk": 118, "spDef": 85, "speed": 75 },
+    "baseStats": { "hp": 65, "attack": 138, "defense": 85, "spAtk": 138, "spDef": 85, "speed": 75 },
     "abilities": [
           { "name": "Spicy Spray", "description": "When the Pokémon uses a Grass- or Fire-type move, it may leave the target with a burn.", "isChampions": true }
         ],
@@ -17756,7 +17756,7 @@ export const POKEMON_SEED: ChampionsPokemon[] = [
     "name": "Mega Glimmora",
     "sprite": "/sprites/970m.png",
     "types": [ "rock", "poison" ],
-    "baseStats": { "hp": 93, "attack": 65, "defense": 110, "spAtk": 170, "spDef": 101, "speed": 86 },
+    "baseStats": { "hp": 83, "attack": 90, "defense": 105, "spAtk": 150, "spDef": 96, "speed": 101 },
     "abilities": [
           { "name": "Adaptability", "description": "STAB bonus is 2× instead of 1.5×.", "isChampions": false }
         ],
@@ -18457,7 +18457,7 @@ export const POKEMON_SEED: ChampionsPokemon[] = [
     "name": "Mega Chandelure",
     "sprite": "/sprites/609m.png",
     "types": [ "ghost", "fire" ],
-    "baseStats": { "hp": 70, "attack": 65, "defense": 110, "spAtk": 185, "spDef": 110, "speed": 80 },
+    "baseStats": { "hp": 60, "attack": 75, "defense": 110, "spAtk": 175, "spDef": 110, "speed": 90 },
     "abilities": [
           { "name": "Infiltrator", "description": "Passes through the foe's barrier and strikes.", "isChampions": false }
         ],
@@ -18477,7 +18477,7 @@ export const POKEMON_SEED: ChampionsPokemon[] = [
   "name": "Floette",
   "dexNumber": 670,
   "types": [ "fairy" ],
-  "baseStats": { "hp": 54, "attack": 45, "defense": 47, "spAtk": 75, "spDef": 98, "speed": 52 },
+  "baseStats": { "hp": 74, "attack": 65, "defense": 67, "spAtk": 125, "spDef": 128, "speed": 92 },
   "abilities": [
         { "name": "Flower Veil", "description": "Ally Grass-type Pokémon are protected from status conditions and stat decreases.", "isHidden": false },
         { "name": "Symbiosis", "description": "Passes the Pokémon's held item to an ally when that ally uses its item.", "isHidden": true }
@@ -18533,7 +18533,7 @@ export const POKEMON_SEED: ChampionsPokemon[] = [
     "name": "Mega Floette",
     "sprite": "/sprites/670m.png",
     "types": [ "fairy" ],
-    "baseStats": { "hp": 64, "attack": 55, "defense": 67, "spAtk": 115, "spDef": 118, "speed": 52 },
+    "baseStats": { "hp": 74, "attack": 85, "defense": 87, "spAtk": 155, "spDef": 148, "speed": 102 },
     "abilities": [
           { "name": "Fairy Aura", "description": "Powers up each Pokémon's Fairy-type moves by 33%.", "isChampions": false }
         ],
@@ -19320,7 +19320,7 @@ export const POKEMON_SEED: ChampionsPokemon[] = [
     "name": "Mega Barbaracle",
     "sprite": "/sprites/689m.png",
     "types": [ "rock", "fighting" ],
-    "baseStats": { "hp": 82, "attack": 145, "defense": 135, "spAtk": 64, "spDef": 106, "speed": 68 },
+    "baseStats": { "hp": 72, "attack": 140, "defense": 130, "spAtk": 64, "spDef": 106, "speed": 88 },
     "abilities": [
           { "name": "Tough Claws", "description": "Contact moves deal 33% more damage.", "isChampions": false }
         ],
@@ -19521,7 +19521,7 @@ export const POKEMON_SEED: ChampionsPokemon[] = [
     "name": "Mega Dragalge",
     "sprite": "/sprites/691m.png",
     "types": [ "poison", "dragon" ],
-    "baseStats": { "hp": 75, "attack": 85, "defense": 110, "spAtk": 137, "spDef": 143, "speed": 44 },
+    "baseStats": { "hp": 65, "attack": 85, "defense": 105, "spAtk": 132, "spDef": 163, "speed": 44 },
     "abilities": [
           { "name": "Regenerator", "description": "Heals 33% max HP upon switching out.", "isChampions": false }
         ],
@@ -19630,7 +19630,7 @@ export const POKEMON_SEED: ChampionsPokemon[] = [
     "name": "Mega Eelektross",
     "sprite": "/sprites/604m.png",
     "types": [ "electric" ],
-    "baseStats": { "hp": 95, "attack": 155, "defense": 100, "spAtk": 115, "spDef": 100, "speed": 50 },
+    "baseStats": { "hp": 85, "attack": 145, "defense": 80, "spAtk": 135, "spDef": 90, "speed": 80 },
     "abilities": [
           { "name": "Eelevate", "description": "The Pokemon floats off the ground, making it immune to Ground-type moves, Spikes, Toxic Spikes, and Sticky Web. When the Pokemon knocks out a target with an attack, its highest stat is boosted by 1 stage.", "isChampions": true }
         ],
@@ -19716,7 +19716,7 @@ export const POKEMON_SEED: ChampionsPokemon[] = [
     "name": "Mega Falinks",
     "sprite": "/sprites/870m.png",
     "types": [ "fighting" ],
-    "baseStats": { "hp": 75, "attack": 140, "defense": 120, "spAtk": 80, "spDef": 80, "speed": 75 },
+    "baseStats": { "hp": 65, "attack": 135, "defense": 135, "spAtk": 70, "spDef": 65, "speed": 100 },
     "abilities": [
           { "name": "Defiant", "description": "Raises Attack by 2 stages when any stat is lowered.", "isChampions": false }
         ],
@@ -19961,7 +19961,7 @@ export const POKEMON_SEED: ChampionsPokemon[] = [
     "name": "Mega Malamar",
     "sprite": "/sprites/687m.png",
     "types": [ "dark", "psychic" ],
-    "baseStats": { "hp": 96, "attack": 132, "defense": 108, "spAtk": 78, "spDef": 95, "speed": 73 },
+    "baseStats": { "hp": 86, "attack": 102, "defense": 88, "spAtk": 98, "spDef": 120, "speed": 88 },
     "abilities": [
           { "name": "Contrary", "description": "Stat changes are reversed. Boosts become drops and vice versa.", "isChampions": false }
         ],
@@ -20518,7 +20518,7 @@ export const POKEMON_SEED: ChampionsPokemon[] = [
     "name": "Mega Scolipede",
     "sprite": "/sprites/545m.png",
     "types": [ "bug", "poison" ],
-    "baseStats": { "hp": 70, "attack": 140, "defense": 109, "spAtk": 65, "spDef": 89, "speed": 112 },
+    "baseStats": { "hp": 60, "attack": 140, "defense": 149, "spAtk": 75, "spDef": 99, "speed": 62 },
     "abilities": [
           { "name": "Shell Armor", "description": "Cannot be hit by critical hits.", "isChampions": false }
         ],
@@ -20636,7 +20636,7 @@ export const POKEMON_SEED: ChampionsPokemon[] = [
     "name": "Mega Scrafty",
     "sprite": "/sprites/560m.png",
     "types": [ "dark", "fighting" ],
-    "baseStats": { "hp": 75, "attack": 130, "defense": 135, "spAtk": 55, "spDef": 135, "speed": 58 },
+    "baseStats": { "hp": 65, "attack": 130, "defense": 135, "spAtk": 55, "spDef": 135, "speed": 68 },
     "abilities": [
           { "name": "Intimidate", "description": "Lowers opponents' Attack one stage on switch-in.", "isChampions": false }
         ],
@@ -20714,7 +20714,7 @@ export const POKEMON_SEED: ChampionsPokemon[] = [
     "name": "Mega Staraptor",
     "sprite": "/sprites/398m.png",
     "types": [ "fighting", "flying" ],
-    "baseStats": { "hp": 95, "attack": 160, "defense": 90, "spAtk": 60, "spDef": 80, "speed": 100 },
+    "baseStats": { "hp": 85, "attack": 140, "defense": 100, "spAtk": 60, "spDef": 90, "speed": 110 },
     "abilities": [
           { "name": "Contrary", "description": "Stat changes are reversed. Boosts become drops and vice versa.", "isChampions": false }
         ],
@@ -20989,7 +20989,7 @@ export const POKEMON_SEED: ChampionsPokemon[] = [
     "name": "Mega Pyroar",
     "sprite": "/sprites/668m.png",
     "types": [ "fire", "normal" ],
-    "baseStats": { "hp": 96, "attack": 78, "defense": 92, "spAtk": 149, "spDef": 86, "speed": 106 },
+    "baseStats": { "hp": 86, "attack": 88, "defense": 92, "spAtk": 129, "spDef": 86, "speed": 126 },
     "abilities": [
           { "name": "Fire Mane", "description": "Boosts the power of the Pokemon's Fire-type moves by 50%.", "isChampions": true }
         ],
@@ -21160,7 +21160,7 @@ export const POKEMON_SEED: ChampionsPokemon[] = [
     "name": "Mega Meowstic",
     "sprite": "/sprites/678m.png",
     "types": [ "psychic" ],
-    "baseStats": { "hp": 84, "attack": 58, "defense": 96, "spAtk": 123, "spDef": 101, "speed": 104 },
+    "baseStats": { "hp": 74, "attack": 48, "defense": 76, "spAtk": 143, "spDef": 101, "speed": 124 },
     "abilities": [
           { "name": "Trace", "description": "Copies an opponent's ability upon entering battle.", "isChampions": false }
         ],

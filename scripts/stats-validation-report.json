@@ -1,0 +1,26 @@
+{
+  "checked": 233,
+  "errors": [
+    {
+      "name": "Ursaluna",
+      "url": "https://www.serebii.net/pokedex-champions/ursaluna/",
+      "status": 404
+    },
+    {
+      "name": "Pawmot",
+      "url": "https://www.serebii.net/pokedex-champions/pawmot/",
+      "status": 404
+    },
+    {
+      "name": "Tatsugiri",
+      "url": "https://www.serebii.net/pokedex-champions/tatsugiri/",
+      "status": 404
+    },
+    {
+      "name": "Dondozo",
+      "url": "https://www.serebii.net/pokedex-champions/dondozo/",
+      "status": 404
+    }
+  ],
+  "mismatches": []
+}
