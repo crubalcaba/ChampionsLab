@@ -33,6 +33,8 @@ export interface MoveFlags {
   priority?: boolean;        // is a priority move
   ignoresBurn?: boolean;     // bypasses burn damage halving (Facade, Sparkling Aria)
   dealsPhysicalDamage?: boolean; // uses SpA stat but targets Def (Psyshock, Psystrike, Secret Sword)
+  charge?: boolean;           // charges turn 1, fires turn 2 (instant in sun for Solar Beam)
+  recharge?: boolean;         // must recharge next turn (Hyper Beam etc.)
 }
 
 export interface SecondaryEffect {
@@ -133,7 +135,7 @@ export const MOVE_DATA: Record<string, EngineMove> = {
   "Hyper Beam": {
     name: "Hyper Beam", type: "normal", category: "special", basePower: 150,
     accuracy: 90, pp: 5, priority: 0, target: "normal",
-    flags: {},
+    flags: { recharge: true },
     effect: "Must recharge next turn.",
   },
   "Hyper Voice": {
@@ -643,7 +645,7 @@ export const MOVE_DATA: Record<string, EngineMove> = {
   "Solar Beam": {
     name: "Solar Beam", type: "grass", category: "special", basePower: 120,
     accuracy: 100, pp: 10, priority: 0, target: "normal",
-    flags: {},
+    flags: { charge: true },
     effect: "Charges turn 1, fires turn 2. Instant in sun.",
   },
   "Leech Seed": {

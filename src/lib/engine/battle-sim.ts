@@ -136,6 +136,10 @@ interface BattlePokemon {
   hasChangedType: boolean;
   // Choice item move lock
   choiceLockedMove: string | null;
+  // Two-turn charge moves (Solar Beam, etc.)
+  chargingMove: string | null;
+  // Recharge moves (Hyper Beam, etc.)
+  mustRecharge: boolean;
   // Tracking for log: last move missed
   lastMoveMissed: boolean;
   // Tracking for log: last move was immune
@@ -239,6 +243,9 @@ function createBattlePokemon(pokemon: ChampionsPokemon, set: CommonSet, teamForI
     hasChangedType: false,
     // Choice item lock
     choiceLockedMove: null,
+    // Two-turn / recharge move tracking
+    chargingMove: null,
+    mustRecharge: false,
     // Log tracking
     lastMoveMissed: false,
     lastMoveImmune: false,
@@ -1608,6 +1615,21 @@ function executeMove(
     return;
   }
   
+  // ── TWO-TURN CHARGE MOVES (Solar Beam etc.) ─────────────────────────────
+  if (move.flags.charge) {
+    const instantInSun = state.field.weather === "sun";
+    if (instantInSun) {
+      user.chargingMove = null;
+    } else if (user.chargingMove !== moveName) {
+      // First turn: begin charging
+      user.chargingMove = moveName;
+      return;
+    } else {
+      // Second turn: fire and clear charge
+      user.chargingMove = null;
+    }
+  }
+
   // Damaging moves
   const targets: BattlePokemon[] = [];
   
@@ -1990,6 +2012,11 @@ function executeMove(
   
   // Fake Out can only be used once
   if (moveName === "Fake Out") user.canFakeOut = false;
+
+  // Recharge moves (Hyper Beam etc.) require a recharge turn next action
+  if (move.flags.recharge) {
+    user.mustRecharge = true;
+  }
 }
 
 /** Randomly pick 4 indices from a team of up to 6 */
@@ -2460,7 +2487,22 @@ export function simulateBattle(
           switchedOutThisTurn.push(action.mon);
           applySwitch(state, action.sideIndex, slot, switchedOutThisTurn);
         }
+        // Switching clears any pending charge
+        action.mon.chargingMove = null;
+        action.mon.mustRecharge = false;
         continue;
+      }
+
+      // Recharge moves (Hyper Beam etc.): skip this turn to recharge
+      if (action.mon.mustRecharge) {
+        action.mon.mustRecharge = false;
+        action.mon.hasMoved = true;
+        continue;
+      }
+
+      // Two-turn charge moves: if already charging a different move, charge is lost
+      if (action.mon.chargingMove && action.mon.chargingMove !== action.moveName) {
+        action.mon.chargingMove = null;
       }
 
       // Sucker Punch: fails if target is using a status move, switching, or already moved

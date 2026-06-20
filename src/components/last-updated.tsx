@@ -14,6 +14,12 @@ interface ChangelogEntry {
     {
       date: "18/06/2026",
       items: [
+        "⚔️ Battle engine fixes: Solar Beam now fires instantly in harsh sunlight and charges otherwise; Hyper Beam now correctly forces a recharge turn",
+      ],
+    },
+    {
+      date: "18/06/2026",
+      items: [
         "🤖 Re-ran battle-bot training with corrected stats — 2,000,000 simulated battles, 861 teams, 272 Pokémon, refreshed ELO rankings, counters, and archetype insights",
       ],
     },
