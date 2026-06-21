@@ -14,6 +14,12 @@ interface ChangelogEntry {
     {
       date: "18/06/2026",
       items: [
+        "💎 Added missing mega stones for new megas: Blazikenite, Swampertite, Sceptilite, Scolipedite, Malamarite, Dragalgite, Eelektrossite, Barbaraclite, Falinksite, Scraftite, Staraptite, Pyroarite, and Meowsticite",
+      ],
+    },
+    {
+      date: "18/06/2026",
+      items: [
         "⚔️ Battle engine fixes: Solar Beam now fires instantly in harsh sunlight and charges otherwise; Hyper Beam now correctly forces a recharge turn",
       ],
     },

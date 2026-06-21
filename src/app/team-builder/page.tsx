@@ -2010,7 +2010,8 @@ export default function TeamBuilderPage() {
                           if (anySet) return anySet;
                           // Fallback to item definition for new/uncatalogued megas
                           const suffix = form.name.endsWith(" X") ? " X" : form.name.endsWith(" Y") ? " Y" : form.name.endsWith(" Z") ? " Z" : "";
-                          const candidates = Object.values(ITEMS).filter(i => i.isMegaStone && i.forPokemon === editPkm.name);
+                          const baseName = editPkm.name.replace(/-M$|-F$/, "");
+                          const candidates = Object.values(ITEMS).filter(i => i.isMegaStone && (i.forPokemon === editPkm.name || i.forPokemon === baseName));
                           if (candidates.length === 0) return undefined;
                           if (candidates.length === 1) return candidates[0].name;
                           return candidates.find(i => suffix ? i.name.endsWith(suffix) : !i.name.match(/ite [XYZ]$/))?.name ?? candidates[0].name;
@@ -2091,7 +2092,8 @@ export default function TeamBuilderPage() {
                               if (set) return set;
                               // Fallback to item definition for new/uncatalogued megas
                               const suffix = form.name.endsWith(" X") ? " X" : form.name.endsWith(" Y") ? " Y" : form.name.endsWith(" Z") ? " Z" : "";
-                              const candidates = Object.values(ITEMS).filter(i => i.isMegaStone && i.forPokemon === editPkm.name);
+                              const baseName = editPkm.name.replace(/-M$|-F$/, "");
+                              const candidates = Object.values(ITEMS).filter(i => i.isMegaStone && (i.forPokemon === editPkm.name || i.forPokemon === baseName));
                               if (candidates.length === 0) return undefined;
                               if (candidates.length === 1) return candidates[0].name;
                               return candidates.find(i => suffix ? i.name.endsWith(suffix) : !i.name.match(/ite [XYZ]$/))?.name ?? candidates[0].name;
