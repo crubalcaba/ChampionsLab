@@ -1053,6 +1053,7 @@
       "p3": "우리는 경쟁 포켓몬 커뮤니티가 고품질 도구를 돈을 내지 않고도 사용할 자격이 있다고 믿습니다. Champions Lab이 유용하다면, 가장 좋은 후원 방법은 친구와 동료 트레이너들과 공유하는 것입니다!"
     },
     "credits": {
+      "attribution": "<strong>모든 크레딧은 Champions Lab의 원래 개발자들에게 돌아갑니다.</strong> 이것은 비공식 팬 포크입니다 — 진짜 버전은 <a href=\"https://championslab.xyz\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"font-semibold text-violet-600 hover:text-violet-700 underline underline-offset-2\">championslab.xyz</a>에서 확인하세요.",
       "p1": "<strong>Champions Lab 팀</strong> - 디자인, 개발, 배틀 엔진, 데이터 큐레이션, 그리고 그 사이의 모든 것. 우리는 이것을 최고의 경쟁 포켓몬 도구로 만드는 데 시간을 쏟는 작지만 헌신적인 팀입니다.",
       "p2": "끊임없는 영감을 주는 <strong>경쟁 포켓몬 커뮤니티</strong>, VGC를 가능하게 하는 토너먼트 운영진, 그리고 팀을 공유하고 가이드를 작성하고 신규자를 도운 모든 플레이어에게 큰 감사를 드립니다.",
       "p3": "버그를 신고하고, 기능을 제안하고, 칭찬 한마디 해주신 모든 분에게 특별히 감사드립니다. 이 프로젝트는 여러분 덕분에 존재합니다."
@@ -1343,6 +1344,7 @@
   },
   "footer": {
     "disclaimer": "Champions Lab은 비공식 팬 프로젝트이며 Nintendo, The Pokémon Company International, Game Freak Inc., Creatures Inc.와 제휴, 승인, 후원을 받지 않았습니다. Pokémon 및 Pokémon 캐릭터 이름은 Nintendo의 상표입니다.",
+    "attribution": "모든 크레딧은 원본 <a href=\"https://championslab.xyz\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"font-medium underline underline-offset-2 hover:text-foreground\">Champions Lab</a>에게 — championslab.xyz",
     "privacy": "개인정보 처리방침",
     "terms": "이용약관",
     "cookieSettings": "쿠키 설정"

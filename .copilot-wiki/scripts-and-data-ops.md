@@ -1,8 +1,10 @@
 ---
-last-verified: 2026-06-27
+last-verified: 2026-06-28
 verified-against:
   - scripts/
   - scripts/download-mega-sprites.cjs
+  - scripts/wait-for-package.ps1
+  - scripts/package-verbose.cjs
   - package.json
 key-symbols: []
 ---
@@ -69,6 +71,13 @@ These are **outputs**, regenerated on each run; do not edit by hand.
 
 - `scripts/daily-limitless-sync.sh` — cron entry-point for tournament sync.
 - `scripts/post-sim-deploy.sh`, `scripts/watch-and-deploy.sh`, `scripts/download-sprites.sh` — deploy / asset utilities.
+
+## Packaging helpers
+
+These don't fit the prefix taxonomy; they wrap the Electron desktop build (see [build-and-verification → Desktop packaging](build-and-verification.md#desktop-packaging-electron--electron-builder)).
+
+- `scripts/package-verbose.cjs` — `npm run package:verbose`. Cross-shell wrapper that runs `next build` then `electron-builder --win <nsis|portable> --x64` with `DEBUG=electron-builder*` set so the long quiet phases (asar, 7z/LZMA, NSIS compose) emit progress. Pass `-- --portable` to switch target. Sets `shell: process.platform === "win32"` to avoid Node 20+ `EINVAL` on `.cmd` shims (CVE-2024-27980).
+- `scripts/wait-for-package.ps1` — `powershell -File scripts/wait-for-package.ps1`. Blocking watcher that polls `dist-electron/` for a target artifact (default pattern `ChampionsLab-Portable-*.exe`; override with `-artifactPattern "ChampionsLab-Setup-*.exe"`). If file activity stalls for `-stuckMinutes` (default 5) it kills builders and restarts `npm run package` once; aborts after `-hardCapMinutes` (default 45). Use when you want a single long-blocking call instead of repeatedly polling for the artifact.
 
 ## Typical workflows
 

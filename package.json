@@ -11,11 +11,13 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "electron": "electron .",
-    "package": "next build && electron-builder --win portable --x64"
+    "package": "next build && electron-builder --win nsis --x64",
+    "package:portable": "next build && electron-builder --win portable --x64",
+    "package:verbose": "node scripts/package-verbose.cjs"
   },
   "build": {
     "appId": "xyz.championslab.desktop",
-    "productName": "Champions Lab",
+    "productName": "Not exactly Champions Lab",
     "asar": true,
     "files": [
       "electron/**/*",
@@ -29,10 +31,22 @@
     },
     "win": {
       "target": [
-        { "target": "portable", "arch": ["x64"] }
+        { "target": "nsis", "arch": ["x64"] }
       ],
       "icon": "public/icon-512.png",
-      "artifactName": "ChampionsLab-Portable-${version}.exe"
+      "artifactName": "ChampionsLab-Setup-${version}.${ext}"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "allowElevation": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Not exactly Champions Lab",
+      "uninstallDisplayName": "Not exactly Champions Lab ${version}",
+      "deleteAppDataOnUninstall": false,
+      "artifactName": "ChampionsLab-Setup-${version}.${ext}"
     },
     "portable": {
       "artifactName": "ChampionsLab-Portable-${version}.exe"

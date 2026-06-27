@@ -1,9 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { Shield, FileText, Cookie } from "lucide-react";
+import { Shield, FileText } from "lucide-react";
 import { useI18n } from "@/lib/i18n";
-import { resetCookieConsent } from "./cookie-consent";
 
 export function Footer() {
   const { t } = useI18n();
@@ -13,6 +12,10 @@ export function Footer() {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
           <div className="space-y-2 max-w-xl">
+            <p
+              className="text-xs text-muted-foreground leading-relaxed"
+              dangerouslySetInnerHTML={{ __html: t("footer.attribution") }}
+            />
             <p className="text-xs text-muted-foreground leading-relaxed">
               {t("footer.disclaimer")}
             </p>
@@ -33,14 +36,6 @@ export function Footer() {
               <FileText className="w-3.5 h-3.5" />
               {t("footer.terms")}
             </Link>
-            <button
-              type="button"
-              onClick={resetCookieConsent}
-              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
-            >
-              <Cookie className="w-3.5 h-3.5" />
-              {t("footer.cookieSettings")}
-            </button>
           </div>
         </div>
       </div>

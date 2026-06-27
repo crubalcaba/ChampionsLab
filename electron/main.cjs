@@ -112,7 +112,7 @@ function createWindow() {
     minWidth: 1024,
     minHeight: 720,
     backgroundColor: "#0c4a6e",
-    title: "Champions Lab",
+    title: "Not exactly Champions Lab",
     icon: path.join(__dirname, "..", "public", "icon-512.png"),
     autoHideMenuBar: true,
     webPreferences: {

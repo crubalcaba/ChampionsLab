@@ -49,14 +49,17 @@ export function Navbar() {
               <div className="transition-transform duration-150 group-hover:scale-105 group-active:scale-95">
                 <Image
                   src="/logo.png"
-                  alt="Champions Lab"
+                  alt="Not exactly Champions Lab"
                   width={76}
                   height={60}
                   className="-my-3"
                   unoptimized
                 />
               </div>
-              <div className="hidden sm:block">
+              <div className="hidden sm:block leading-none">
+                <span className="block text-[9px] font-medium tracking-widest uppercase text-muted-foreground/80 -mb-0.5">
+                  Not exactly
+                </span>
                 <span className="text-lg font-bold tracking-tight whitespace-nowrap bg-gradient-to-r from-emerald-400 via-teal-500 to-cyan-500 bg-clip-text text-transparent font-heading">
                   Champions Lab
                 </span>

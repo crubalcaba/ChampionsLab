@@ -1,11 +1,14 @@
 ---
-last-verified: 2026-06-27
+last-verified: 2026-06-28
 verified-against:
   - package.json
   - next.config.ts
   - tsconfig.json
   - eslint.config.mjs
   - .prettierrc.json
+  - electron/main.cjs
+  - scripts/wait-for-package.ps1
+  - scripts/package-verbose.cjs
 key-symbols:
   - nextConfig
 ---
@@ -78,6 +81,39 @@ Adding a Next `<Image>` source from any other host will fail at build/runtime �
 ## Security headers
 
 Set globally in `next.config.ts.headers()`: `X-Content-Type-Options: nosniff`, `X-Frame-Options: DENY`, `X-XSS-Protection`, `Referrer-Policy: strict-origin-when-cross-origin`, `Permissions-Policy: camera=(), microphone=(), geolocation=()`, `Strict-Transport-Security: max-age=63072000; includeSubDomains; preload`.
+
+## Desktop packaging (Electron + electron-builder)
+
+`electron/main.cjs` wraps the static export (`out/`) in a desktop window using a custom `app://` protocol handler (file:// resolves root-relative `_next/*` paths against the drive root and fails). `package.json > build` configures electron-builder.
+
+### Targets
+
+| Script | Output | Notes |
+|---|---|---|
+| `npm run package` | `dist-electron/ChampionsLab-Setup-${version}.exe` | NSIS installer (default). Per-user install (`perMachine: false`, no UAC), classic wizard (`oneClick: false`), Desktop + Start-menu shortcuts, registered in Apps & Features. `deleteAppDataOnUninstall: false` so localStorage survives reinstalls. |
+| `npm run package:portable` | `dist-electron/ChampionsLab-Portable-${version}.exe` | Self-extracting portable exe. LZMA-compressed (~184 MB). Always re-extracts to `%TEMP%` on launch. |
+| `npm run package:verbose` | NSIS (default) or portable with `-- --portable` | Wraps `next build && electron-builder` via `scripts/package-verbose.cjs` with `DEBUG=electron-builder*` set so progress is logged through the quiet phases (asar pack, 7z/LZMA, NSIS compose). |
+
+### Static-export caveat — `next start` does not work
+
+`next.config.ts` sets `output: "export"`, so `npm run start` fails with `"next start" does not work with "output: export" configuration`. To run the production output as a web server, serve the static dir directly:
+
+```powershell
+npx serve out -l 3000
+```
+
+Electron loads the same `out/` dir via the `app://` protocol handler in `electron/main.cjs`; no HTTP server is involved in the desktop build.
+
+### Helper scripts
+
+- **`scripts/wait-for-package.ps1`** — Watcher. Polls `dist-electron/` for a target artifact pattern (default `ChampionsLab-Portable-*.exe`, override with `-artifactPattern "ChampionsLab-Setup-*.exe"`). If no file activity for `-stuckMinutes` (default 5) it kills `node/electron/electron-builder/next` processes and restarts `npm run package` once. Aborts after `-hardCapMinutes` (default 45). Used when you want to walk away from a long build without burning agent tokens polling.
+- **`scripts/package-verbose.cjs`** — Cross-shell wrapper. Spawns `npm run build` then `electron-builder --win <target> --x64` with `DEBUG=electron-builder*` (override via the env var). `--portable` flag selects the portable target. **Windows quirk**: uses `shell: process.platform === "win32"` because Node 20+ refuses to `spawn` `.cmd` shims (`npm.cmd`, `electron-builder.cmd`) without a shell (CVE-2024-27980 hardening → `EINVAL`).
+
+### What gets cached between runs
+
+- Electron runtime + `winCodeSign` + `nsis` toolchain → `%LOCALAPPDATA%\electron-builder\Cache` (first packaging downloads ~150 MB; subsequent runs skip).
+- Next build cache → `.next/cache` (warm `next build` is the 8s case).
+- LZMA compression of the ~180 MB payload is the dominant per-run cost on warm builds. To skip it, set `"compression": "store"` in the `build` block (`package.json`) — artifacts grow to ~250–300 MB but build is near-instant.
 
 ## Cross-refs
 

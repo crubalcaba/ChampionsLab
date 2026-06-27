@@ -34,7 +34,6 @@ export function ThemeToggle() {
     document.documentElement.classList.toggle("dark", next);
     document.documentElement.style.colorScheme = next ? "dark" : "light";
     localStorage.setItem("championslab-theme", next ? "dark" : "light");
-    document.cookie = `cl-theme=${next ? "dark" : "light"};path=/;max-age=31536000;SameSite=Lax`;
     window.dispatchEvent(new Event(THEME_CHANGE_EVENT));
   };
 

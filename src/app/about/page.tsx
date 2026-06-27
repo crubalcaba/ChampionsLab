@@ -111,13 +111,24 @@ export default function AboutPage() {
             <h2 className="text-lg font-bold">{t("about.creditsTitle")}</h2>
           </div>
           <div className="space-y-3 text-sm text-muted-foreground leading-relaxed">
+            <p
+              className="p-4 rounded-xl border border-violet-300/70 dark:border-violet-400/30 bg-violet-100/60 dark:bg-violet-500/15 text-violet-900 dark:text-violet-100"
+              dangerouslySetInnerHTML={{ __html: t("about.credits.attribution") }}
+            />
             <p dangerouslySetInnerHTML={{ __html: t("about.credits.p1") }} />
             <p dangerouslySetInnerHTML={{ __html: t("about.credits.p2") }} />
             <p dangerouslySetInnerHTML={{ __html: t("about.credits.p3") }} />
           </div>
           <div className="mt-4 flex items-center gap-2 text-xs text-muted-foreground">
             <Globe className="w-3.5 h-3.5" />
-            <span>championslab.xyz</span>
+            <a
+              href="https://championslab.xyz"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-foreground underline underline-offset-2"
+            >
+              championslab.xyz
+            </a>
           </div>
         </div>
 

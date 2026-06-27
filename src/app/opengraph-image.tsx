@@ -5,7 +5,7 @@ import { join } from "node:path";
 // Required by `output: "export"` — pre-rendered once at build time.
 export const dynamic = "force-static";
 
-export const alt = "Champions Lab - Pokémon Champions 2026";
+export const alt = "Not exactly Champions Lab - Pokémon Champions 2026";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 

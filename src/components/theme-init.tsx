@@ -10,9 +10,8 @@ export function ThemeInit() {
         const isDark = stored === "dark";
         document.documentElement.classList.toggle("dark", isDark);
         document.documentElement.style.colorScheme = isDark ? "dark" : "light";
-        document.cookie = `cl-theme=${stored};path=/;max-age=31536000;SameSite=Lax`;
       }
-    } catch (e) {
+    } catch {
       // ignore
     }
   }, []);

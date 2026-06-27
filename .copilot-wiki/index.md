@@ -13,6 +13,7 @@ This wiki is **agent-maintained**. Each page is a synthesised, drift-checked ans
 - [data-validation-rules](data-validation-rules.md) — The cross-file wiring rules for Pokémon / moves / items / abilities. Orphans silently disappear; this page explains why and what to do.
 - [i18n-flow](i18n-flow.md) — How the locale provider, hook surface, and per-category dictionaries fit together. How to add a locale.
 - [storage-and-sharing](storage-and-sharing.md) — localStorage-first persistence, team-sharing endpoints, URL compression, and where Supabase fits (mostly doesn't, yet).
+- [suggested-teammates](suggested-teammates.md) — How the team-builder's Suggested Teammates card ranks candidates: pool filters, `scorePokemonFit` rubric, click-to-add flow with mega resolution, memoization caveat.
 
 ## Operations
 

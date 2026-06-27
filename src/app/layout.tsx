@@ -8,7 +8,6 @@ import { LazyParticles } from "@/components/lazy-particles";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { ThemeInit } from "@/components/theme-init";
 import { MobileNavInit } from "@/components/mobile-nav-init";
-import { CookieConsent } from "@/components/cookie-consent";
 import { I18nProvider } from "@/lib/i18n";
 
 const inter = localFont({
@@ -36,8 +35,7 @@ const notoColorEmoji = localFont({
 });
 
 // Inline script that runs before React hydrates. Reads localStorage to set
-// <html lang> + dark class, eliminating the FOUC that used to be handled by
-// the server-side cookies() read.
+// <html lang> + dark class, eliminating the FOUC.
 const NO_FOUC_SCRIPT = `
 (function(){try{
   var l=localStorage.getItem("championslab-lang");
@@ -49,7 +47,7 @@ const NO_FOUC_SCRIPT = `
 `;
 
 export const metadata: Metadata = {
-  title: "Champions Lab - Pokémon Champions 2026",
+  title: "Not exactly Champions Lab - Pokémon Champions 2026",
   description:
     "The ultimate competitive companion for Pokémon Champions. Season tracking, team builder, battle simulator, and deep Pokémon data - all in one immersive hub.",
   keywords: ["Pokemon Champions", "VGC", "team builder", "battle simulator", "competitive Pokemon", "Pokemon Champions 2026", "VGC team builder", "Pokemon meta"],
@@ -62,10 +60,10 @@ export const metadata: Metadata = {
     apple: "/apple-touch-icon.png",
   },
   openGraph: {
-    title: "Champions Lab - Pokémon Champions 2026",
+    title: "Not exactly Champions Lab - Pokémon Champions 2026",
     description: "The ultimate competitive companion for Pokémon Champions. Team builder, battle simulator, META analysis, and VGC learning - all in one hub.",
     url: "https://championslab.xyz",
-    siteName: "Champions Lab",
+    siteName: "Not exactly Champions Lab",
     type: "website",
     locale: "en_US",
     images: [
@@ -73,13 +71,13 @@ export const metadata: Metadata = {
         url: "/opengraph-image",
         width: 1200,
         height: 630,
-        alt: "Champions Lab - Pokémon Champions 2026",
+        alt: "Not exactly Champions Lab - Pokémon Champions 2026",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Champions Lab - Pokémon Champions 2026",
+    title: "Not exactly Champions Lab - Pokémon Champions 2026",
     description: "The ultimate competitive companion for Pokémon Champions. Team builder, battle simulator, META analysis & more.",
     images: ["/opengraph-image"],
   },
@@ -113,7 +111,6 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col bg-background text-foreground">
         <I18nProvider>
         <LazyParticles />
-        <CookieConsent />
         {/* Pure HTML hamburger  -  works instantly, no React hydration needed */}
         <button
           id="mobile-nav-toggle"
