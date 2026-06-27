@@ -60,9 +60,7 @@ next-env.d.ts
 
 # local-only tooling / IDE / agent scaffolding
 .idea/
-.github/
 .codegraph/
-.copilot-wiki/
 
 # sprite assets (managed by sprite scripts, not source-controlled locally)
 /public/sprites/
