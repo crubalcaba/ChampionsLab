@@ -192,7 +192,7 @@ export function SeasonInfo({ seasonId }: { seasonId: number }) {
 
   const formatDate = (d: string) =>
     new Date(d + "T12:00:00Z").toLocaleDateString(
-      locale === "fr" ? "fr-FR" : locale === "es" ? "es-ES" : locale === "it" ? "it-IT" : locale === "de" ? "de-DE" : "en-US",
+      locale === "fr" ? "fr-FR" : locale === "es" ? "es-ES" : locale === "it" ? "it-IT" : locale === "de" ? "de-DE" : locale === "ko" ? "ko-KR" : "en-US",
       { month: "long", day: "numeric", year: "numeric" }
     );
 

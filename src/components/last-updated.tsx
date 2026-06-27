@@ -12,6 +12,15 @@ interface ChangelogEntry {
 
   const SHARED_ENTRIES: ChangelogEntry[] = [
     {
+      date: "27/06/2026",
+      items: [
+        "🇰🇷 Added full Korean language support",
+        "🇰🇷 Official Korean translations for Pokémon, move, ability, item, and nature names (PokéAPI)",
+        "🇰🇷 Complete Korean UI translation across Pokédex, Team Builder, Battle Bot, META, and more",
+        "🇰🇷 Korean PokéSchool (Learn) page and strategy-tree insights",
+      ],
+    },
+    {
       date: "24/06/2026",
       items: [
         "🤖 Battle bot AI overhaul: Rage Powder / Follow Me now checks for opponent spread moves (Heat Wave, Eruption, etc.), Mega Evolutions are protected more aggressively, and Contrary turns self-drop moves like Close Combat into real advantages",

@@ -10,7 +10,7 @@ import {
   TrendingUp, TrendingDown, GitBranch, Info, Shield,
   Settings2, Minus, Plus, Sparkles, Check, Zap, Download, ClipboardPaste,
 } from "lucide-react";
-import { exportTeamTesterPDF, PDF_LABELS_FR, PDF_LABELS_DE } from "@/lib/export-pdf";
+import { exportTeamTesterPDF, PDF_LABELS_FR, PDF_LABELS_DE, PDF_LABELS_KO } from "@/lib/export-pdf";
 import { POKEMON_SEED, STAT_PRESETS } from "@/lib/pokemon-data";
 import type { ChampionsPokemon, CommonSet, PokemonType, StatPoints } from "@/lib/types";
 import { TYPE_COLORS } from "@/lib/types";
@@ -37,6 +37,8 @@ import {
   translateStrategyTreeIT,
   translateInsightsDE,
   translateStrategyTreeDE,
+  translateInsightsKO,
+  translateStrategyTreeKO,
   generateStrategyTree,
   type PrebuiltTeam,
   type TeamTestDetailedResult,
@@ -768,7 +770,7 @@ export default function TeamTester() {
                     // Build strategy overview from tree
                     const bestLead = result.leadCombos[0];
                     const rawTree = bestLead ? generateStrategyTree(team1Pokemon, team1Sets, team2Pokemon, team2Sets, bestLead, result.winRate) : null;
-                    const tree = rawTree && locale === 'fr' ? translateStrategyTree(rawTree, tm, ta) : rawTree && locale === 'es' ? translateStrategyTreeES(rawTree, tm, ta) : rawTree && locale === 'it' ? translateStrategyTreeIT(rawTree, tm, ta) : rawTree && locale === 'de' ? translateStrategyTreeDE(rawTree, tm, ta) : rawTree;
+                    const tree = rawTree && locale === 'fr' ? translateStrategyTree(rawTree, tm, ta) : rawTree && locale === 'es' ? translateStrategyTreeES(rawTree, tm, ta) : rawTree && locale === 'it' ? translateStrategyTreeIT(rawTree, tm, ta) : rawTree && locale === 'de' ? translateStrategyTreeDE(rawTree, tm, ta) : rawTree && locale === 'ko' ? translateStrategyTreeKO(rawTree, tm, ta) : rawTree;
                     let strategyData: Parameters<typeof exportTeamTesterPDF>[0]["strategy"] = null;
                     if (tree) {
                       // Flatten the first scenario's nodes into linear steps
@@ -822,7 +824,7 @@ export default function TeamTester() {
                       totalGames: result.totalGames,
                       leadCombos: result.leadCombos.map(lc => ({ lead1: lc.lead1, lead2: lc.lead2, winRate: lc.winRate, games: lc.games })),
                       pokemonImpact: result.pokemonImpact.map(pi => ({ name: pi.name, impact: pi.impact, excludeWinRate: pi.excludeWinRate })),
-                      insights: locale === 'fr' ? translateInsights(result.insights, tm) : locale === 'es' ? translateInsightsES(result.insights, tm) : locale === 'it' ? translateInsightsIT(result.insights, tm) : locale === 'de' ? translateInsightsDE(result.insights, tm) : result.insights,
+                      insights: locale === 'fr' ? translateInsights(result.insights, tm) : locale === 'es' ? translateInsightsES(result.insights, tm) : locale === 'it' ? translateInsightsIT(result.insights, tm) : locale === 'de' ? translateInsightsDE(result.insights, tm) : locale === 'ko' ? translateInsightsKO(result.insights, tm) : result.insights,
                       strategy: strategyData,
                       speedTiers: { team1: speed1, team2: speed2 },
                       typeProfile: {
@@ -840,7 +842,7 @@ export default function TeamTester() {
                       roles: { team1: roles1, team2: roles2 },
                       archetypes: { team1: arch1, team2: arch2 },
                       synergyScores: { team1: syn1.overallScore, team2: syn2.overallScore },
-                    }, locale === "fr" ? PDF_LABELS_FR : locale === "de" ? PDF_LABELS_DE : undefined);
+                    }, locale === "fr" ? PDF_LABELS_FR : locale === "de" ? PDF_LABELS_DE : locale === "ko" ? PDF_LABELS_KO : undefined);
                   }}
                   className="px-4 py-2 text-xs rounded-xl flex items-center gap-2 font-heading font-semibold bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-sm shadow-emerald-500/20 hover:shadow-emerald-500/40 hover:scale-[1.02] transition-all"
                 >
@@ -1051,7 +1053,7 @@ export default function TeamTester() {
                     {t('teamTester.matchupInsights')}
                   </h3>
                   <div className="space-y-2">
-                    {(locale === 'fr' ? translateInsights(result.insights, tm) : locale === 'es' ? translateInsightsES(result.insights, tm) : locale === 'it' ? translateInsightsIT(result.insights, tm) : locale === 'de' ? translateInsightsDE(result.insights, tm) : result.insights).map((tip, idx) => (                      <div key={idx} className="flex items-start gap-2.5 p-2.5 rounded-lg bg-gray-50 dark:bg-white/5">
+                    {(locale === 'fr' ? translateInsights(result.insights, tm) : locale === 'es' ? translateInsightsES(result.insights, tm) : locale === 'it' ? translateInsightsIT(result.insights, tm) : locale === 'de' ? translateInsightsDE(result.insights, tm) : locale === 'ko' ? translateInsightsKO(result.insights, tm) : result.insights).map((tip, idx) => (                      <div key={idx} className="flex items-start gap-2.5 p-2.5 rounded-lg bg-gray-50 dark:bg-white/5">
                         <span className="text-sm mt-0.5">💡</span>
                         <p className="text-xs text-muted-foreground leading-relaxed">{tip}</p>
                       </div>
@@ -1952,7 +1954,7 @@ function StrategyFlowchart({
   const tree = useMemo(() => {
     if (!bestLead || team1Pokemon.length < 2 || team2Pokemon.length < 2) return null;
     const raw = generateStrategyTree(team1Pokemon, team1Sets, team2Pokemon, team2Sets, bestLead, winRate);
-    return raw && locale === 'fr' ? translateStrategyTree(raw, tm, ta) : raw && locale === 'es' ? translateStrategyTreeES(raw, tm, ta) : raw && locale === 'it' ? translateStrategyTreeIT(raw, tm, ta) : raw && locale === 'de' ? translateStrategyTreeDE(raw, tm, ta) : raw;
+    return raw && locale === 'fr' ? translateStrategyTree(raw, tm, ta) : raw && locale === 'es' ? translateStrategyTreeES(raw, tm, ta) : raw && locale === 'it' ? translateStrategyTreeIT(raw, tm, ta) : raw && locale === 'de' ? translateStrategyTreeDE(raw, tm, ta) : raw && locale === 'ko' ? translateStrategyTreeKO(raw, tm, ta) : raw;
   }, [team1Pokemon, team1Sets, team2Pokemon, team2Sets, bestLead, winRate, locale, tm, ta]);
 
   // Reset scenario tab when lead changes

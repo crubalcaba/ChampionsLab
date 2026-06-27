@@ -15,6 +15,7 @@ import { SECTIONS_ES } from "@/lib/learn-sections-es";
 import { SECTIONS_IT } from "@/lib/learn-sections-it";
 import { SECTIONS_DE } from "@/lib/learn-sections-de";
 import { SECTIONS_PT_PT } from "@/lib/learn-sections-pt-PT";
+import { SECTIONS_KO } from "@/lib/learn-sections-ko";
 import { LastUpdated } from "@/components/last-updated";
 import { AlertTriangle, Lightbulb, Trophy, Info } from "lucide-react";
 
@@ -487,6 +488,7 @@ export default function LearnPage() {
       locale === "it" ? SECTIONS_IT[i] :
       locale === "de" ? SECTIONS_DE[i] :
       locale === "pt-PT" ? SECTIONS_PT_PT[i] :
+      locale === "ko" ? SECTIONS_KO[i] :
       null;
     if (!localized) return section;
     return {

@@ -11,7 +11,7 @@ import {
   SkipForward, Pause, RotateCcw, Award, Skull, Heart, Wind,
   Calculator, FlaskConical, Settings2, Minus, Plus, Sparkles, X, Check, Download,
 } from "lucide-react";
-import { exportBattleBotPDF, PDF_LABELS_FR, PDF_LABELS_DE } from "@/lib/export-pdf";
+import { exportBattleBotPDF, PDF_LABELS_FR, PDF_LABELS_DE, PDF_LABELS_KO } from "@/lib/export-pdf";
 import DamageCalculator from "@/components/damage-calculator";
 import TeamTester from "@/components/team-tester";
 import { POKEMON_SEED, STAT_PRESETS } from "@/lib/pokemon-data";
@@ -1260,7 +1260,7 @@ export default function BattleBotPage() {
                         archetypeBreakdown: result.archetypeBreakdown,
                         commonWeaknesses: result.commonWeaknesses.map(w => translateBotInsight(w)),
                         strategyTips: result.strategyTips.map(tip => translateBotInsight(tip)),
-                      }, locale === "fr" ? PDF_LABELS_FR : locale === "de" ? PDF_LABELS_DE : undefined);
+                      }, locale === "fr" ? PDF_LABELS_FR : locale === "de" ? PDF_LABELS_DE : locale === "ko" ? PDF_LABELS_KO : undefined);
                     }}
                     className="flex items-center gap-1.5 py-2 px-3 rounded-lg text-xs font-heading font-semibold bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-sm shadow-emerald-500/20 hover:shadow-emerald-500/40 hover:scale-[1.02] transition-all whitespace-nowrap"
                   >

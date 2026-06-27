@@ -16,11 +16,17 @@ All translation files are in `src/lib/i18n/`:
 src/lib/i18n/
 ├── en.json                      # English (base language)
 ├── fr.json                      # French
+├── ko.json                      # Korean
 ├── abilities.fr.json            # Pokémon abilities (French)
+├── abilities.ko.json            # Pokémon abilities (Korean)
 ├── items.fr.json                # Items (French)
+├── items.ko.json                # Items (Korean)
 ├── moves.fr.json                # Moves (French)
+├── moves.ko.json                # Moves (Korean)
 ├── natures.fr.json              # Natures (French)
+├── natures.ko.json              # Natures (Korean)
 ├── pokemon-names.fr.json        # Pokémon names (French)
+├── pokemon-names.ko.json        # Pokémon names (Korean)
 ├── ability-descriptions.*.json  # Ability descriptions
 ├── item-descriptions.*.json     # Item descriptions
 └── move-descriptions.*.json     # Move descriptions
@@ -92,6 +98,17 @@ If you want to improve or complete an existing translation:
     "wrAbbr": "TV",
     "title": "Análisis Meta",
     "pokemonRanking": "Clasificación de Pokémon para {season}"
+  }
+}
+```
+
+**ko.json (Korean):**
+```json
+{
+  "meta": {
+    "wrAbbr": "승률",
+    "title": "메타 분석",
+    "pokemonRanking": "{season} 포켓몬 랭킹"
   }
 }
 ```

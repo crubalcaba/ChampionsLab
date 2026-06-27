@@ -165,6 +165,10 @@ export {
   translateStrategyTreeDE,
   translateInsightsDE,
 } from "./strategy-i18n-de";
+export {
+  translateStrategyTreeKO,
+  translateInsightsKO,
+} from "./strategy-i18n-ko";
 
 // Suggestion Engine
 export {

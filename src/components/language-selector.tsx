@@ -36,6 +36,7 @@ const LANGUAGES: { code: string; flag: string; label: string; sub?: string }[] =
   { code: "it",    flag: "it", label: "Italiano" },
   { code: "de",    flag: "de", label: "Deutsch" },
   { code: "pt-PT", flag: "pt", label: "Português" },
+  { code: "ko",    flag: "kr", label: "한국어" },
 ];
 
 export function LanguageSelector({ mobile = false }: { mobile?: boolean }) {
