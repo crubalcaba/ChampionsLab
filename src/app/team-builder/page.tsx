@@ -1981,14 +1981,40 @@ export default function TeamBuilderPage() {
                             })),
                           ];
                           return (
-                            <SearchSelect
-                              key={moveIdx}
-                              value={currentMove}
-                              options={moveOptions}
-                              onChange={(v) => updateMove(selectedSlotIndex, moveIdx, v)}
-                              placeholder={t('teamBuilder.emptySlot')}
-                              triggerBadge={moveData ? { text: tt(moveData.type), color: `${TYPE_COLORS[moveData.type]}AA` } : null}
-                            />
+                            <div key={moveIdx}>
+                              <SearchSelect
+                                value={currentMove}
+                                options={moveOptions}
+                                onChange={(v) => updateMove(selectedSlotIndex, moveIdx, v)}
+                                placeholder={t('teamBuilder.emptySlot')}
+                                triggerBadge={moveData ? { text: tt(moveData.type), color: `${TYPE_COLORS[moveData.type]}AA` } : null}
+                              />
+                              {moveData && (
+                                <div className="flex flex-wrap items-center gap-1 mt-1 px-1">
+                                  {moveData.category === "physical" && (
+                                    <span className="text-[9px] font-extrabold text-orange-500">⚔ Phys</span>
+                                  )}
+                                  {moveData.category === "special" && (
+                                    <span className="text-[9px] font-extrabold text-indigo-500">✦ Spec</span>
+                                  )}
+                                  {moveData.category === "status" && (
+                                    <span className="text-[9px] font-extrabold text-gray-400">◇ Status</span>
+                                  )}
+                                  {moveData.power ? (
+                                    <span className="text-[9px] text-muted-foreground">· {moveData.power}bp</span>
+                                  ) : null}
+                                  {moveData.accuracy ? (
+                                    <span className="text-[9px] text-muted-foreground">· {moveData.accuracy}%</span>
+                                  ) : null}
+                                  <span className="text-[9px] text-muted-foreground">· {moveData.pp}pp</span>
+                                </div>
+                              )}
+                              {moveData?.description && (
+                                <p className="text-[9px] text-muted-foreground mt-0.5 px-1 line-clamp-2 leading-snug">
+                                  {tmd(moveData.name, moveData.description)}
+                                </p>
+                              )}
+                            </div>
                           );
                         })}
                       </div>
@@ -2116,13 +2142,15 @@ export default function TeamBuilderPage() {
                                       {editPkm.abilities.map((ab) => {
                                         const isActive = preMegaAbility === ab.name;
                                         return (
-                                          <button key={ab.name} onClick={() => updateSlot(selectedSlotIndex, { preMegaAbility: ab.name })} className={cn("w-full text-left px-3 py-1.5 rounded-lg text-[11px] border transition-all", isActive ? "bg-emerald-100 border-emerald-300 font-semibold text-emerald-800" : "bg-gray-50 border-gray-200 hover:bg-gray-100 hover:border-gray-300")}>
-                                            <div className="flex items-center justify-between">
-                                              <span>{ta(ab.name)}{ab.isHidden ? " (H)" : ""}</span>
-                                              {isActive && <span className="text-[8px] text-emerald-500 font-bold">{t('teamBuilder.activeLabel')}</span>}
-                                            </div>
-                                            <p className="text-[8px] text-muted-foreground mt-0.5 line-clamp-1">{tad(ab.name, ab.description)}</p>
-                                          </button>
+                                          <div key={ab.name}>
+                                            <button onClick={() => updateSlot(selectedSlotIndex, { preMegaAbility: ab.name })} className={cn("w-full text-left px-3 py-1.5 rounded-lg text-[11px] border transition-all", isActive ? "bg-emerald-100 border-emerald-300 font-semibold text-emerald-800" : "bg-gray-50 border-gray-200 hover:bg-gray-100 hover:border-gray-300")}>
+                                              <div className="flex items-center justify-between">
+                                                <span>{ta(ab.name)}{ab.isHidden ? " (H)" : ""}</span>
+                                                {isActive && <span className="text-[8px] text-emerald-500 font-bold">{t('teamBuilder.activeLabel')}</span>}
+                                              </div>
+                                            </button>
+                                            <p className="text-[9px] text-muted-foreground mt-1 px-1 leading-snug">{tad(ab.name, ab.description)}</p>
+                                          </div>
                                         );
                                       })}
                                       {megaAb && (
@@ -2132,8 +2160,8 @@ export default function TeamBuilderPage() {
                                             <div className="flex items-center justify-between">
                                               <span>{ta(megaAb.name)}<span className="ml-1 text-[9px] text-amber-600 font-bold">{t('teamBuilder.megaLabel')}</span></span>
                                             </div>
-                                            <p className="text-[8px] text-muted-foreground mt-0.5 line-clamp-1">{tad(megaAb.name, megaAb.description)}</p>
                                           </div>
+                                          <p className="text-[9px] text-muted-foreground mt-1 px-1 leading-snug">{tad(megaAb.name, megaAb.description)}</p>
                                         </>
                                       )}
                                     </>
@@ -2145,13 +2173,15 @@ export default function TeamBuilderPage() {
                                   const isActive = editSlotData.ability === ab.name;
                                   const isSugg = slotSuggestion?.suggestedAbilities.some(a => a.name === ab.name);
                                   return (
-                                    <button key={ab.name} onClick={() => { updateSlot(selectedSlotIndex, { ability: ab.name, isMega: false, megaFormIndex: 0 }); }} className={cn("w-full text-left px-3 py-1.5 rounded-lg text-[11px] border transition-all", isActive ? "bg-emerald-100 border-emerald-300 font-semibold text-emerald-800" : "bg-gray-50 border-gray-200 hover:bg-gray-100 hover:border-gray-300")}>
-                                      <div className="flex items-center justify-between">
-                                        <span>{ta(ab.name)}{ab.isHidden ? " (H)" : ""}</span>
-                                        {isSugg && <span className="text-[8px] text-emerald-500 font-bold">{t('teamBuilder.recLabel')}</span>}
-                                      </div>
-                                      <p className="text-[8px] text-muted-foreground mt-0.5 line-clamp-1">{tad(ab.name, ab.description)}</p>
-                                    </button>
+                                    <div key={ab.name}>
+                                      <button onClick={() => { updateSlot(selectedSlotIndex, { ability: ab.name, isMega: false, megaFormIndex: 0 }); }} className={cn("w-full text-left px-3 py-1.5 rounded-lg text-[11px] border transition-all", isActive ? "bg-emerald-100 border-emerald-300 font-semibold text-emerald-800" : "bg-gray-50 border-gray-200 hover:bg-gray-100 hover:border-gray-300")}>
+                                        <div className="flex items-center justify-between">
+                                          <span>{ta(ab.name)}{ab.isHidden ? " (H)" : ""}</span>
+                                          {isSugg && <span className="text-[8px] text-emerald-500 font-bold">{t('teamBuilder.recLabel')}</span>}
+                                        </div>
+                                      </button>
+                                      <p className="text-[9px] text-muted-foreground mt-1 px-1 leading-snug">{tad(ab.name, ab.description)}</p>
+                                    </div>
                                   );
                                 })}
                                 {allMegaAbilities.map(({ ab, formIndex, formName }) => {
@@ -2159,13 +2189,15 @@ export default function TeamBuilderPage() {
                                   const isSugg = slotSuggestion?.suggestedAbilities.some(a => a.name === ab.name);
                                   const shortForm = megaForms.length > 1 ? formName.replace(editPkm.name, "").replace("Mega ", "").trim() : "";
                                   return (
-                                    <button key={ab.name} onClick={() => { updateSlot(selectedSlotIndex, { ability: ab.name, isMega: true, megaFormIndex: formIndex, preMegaAbility: editSlotData.ability || editPkm.abilities[0]?.name, item: getMegaStoneForForm(formIndex) }); }} className={cn("w-full text-left px-3 py-1.5 rounded-lg text-[11px] border transition-all", isActive ? "bg-amber-100 border-amber-300 font-semibold text-amber-800" : "bg-gray-50 border-gray-200 hover:bg-gray-100 hover:border-gray-300")}>
-                                      <div className="flex items-center justify-between">
-                                        <span>{ta(ab.name)}{shortForm ? ` (${shortForm})` : ""}<span className="ml-1 text-[9px] text-amber-600 font-bold">{t('teamBuilder.megaLabel')}</span></span>
-                                        {isSugg && <span className="text-[8px] text-emerald-500 font-bold">{t('teamBuilder.recLabel')}</span>}
-                                      </div>
-                                      <p className="text-[8px] text-muted-foreground mt-0.5 line-clamp-1">{tad(ab.name, ab.description)}</p>
-                                    </button>
+                                    <div key={ab.name}>
+                                      <button onClick={() => { updateSlot(selectedSlotIndex, { ability: ab.name, isMega: true, megaFormIndex: formIndex, preMegaAbility: editSlotData.ability || editPkm.abilities[0]?.name, item: getMegaStoneForForm(formIndex) }); }} className={cn("w-full text-left px-3 py-1.5 rounded-lg text-[11px] border transition-all", isActive ? "bg-amber-100 border-amber-300 font-semibold text-amber-800" : "bg-gray-50 border-gray-200 hover:bg-gray-100 hover:border-gray-300")}>
+                                        <div className="flex items-center justify-between">
+                                          <span>{ta(ab.name)}{shortForm ? ` (${shortForm})` : ""}<span className="ml-1 text-[9px] text-amber-600 font-bold">{t('teamBuilder.megaLabel')}</span></span>
+                                          {isSugg && <span className="text-[8px] text-emerald-500 font-bold">{t('teamBuilder.recLabel')}</span>}
+                                        </div>
+                                      </button>
+                                      <p className="text-[9px] text-muted-foreground mt-1 px-1 leading-snug">{tad(ab.name, ab.description)}</p>
+                                    </div>
                                   );
                                 })}
                                   </>
@@ -2247,7 +2279,11 @@ export default function TeamBuilderPage() {
                             const isMinus = nat.minus === stat;
                             return (
                               <div key={stat} className="flex items-center gap-1.5">
-                                <span className={cn("text-[10px] font-medium w-7", isPlus ? "text-red-500" : isMinus ? "text-blue-500" : "text-muted-foreground")}>{ts(stat)}</span>
+                                <span className={cn("text-[10px] font-medium w-9 flex items-center", isPlus ? "text-red-500" : isMinus ? "text-blue-500" : "text-muted-foreground")}>
+                                  <span>{ts(stat)}</span>
+                                  {isPlus && <span style={{ paddingLeft: "0.5em" }} aria-label="increased">⬆️</span>}
+                                  {isMinus && <span style={{ paddingLeft: "0.5em" }} aria-label="decreased">⬇️</span>}
+                                </span>
                                 <span className="text-[10px] font-bold text-muted-foreground w-6 text-right tabular-nums">{base}</span>
                                 <button onClick={() => updateSP(selectedSlotIndex, stat, -2)} className="w-5 h-5 rounded bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors"><Minus className="w-2.5 h-2.5" /></button>
                                 <StatSlider value={value} max={MAX_PER_STAT} step={2} onChange={(v) => setSPDirect(selectedSlotIndex, stat, v)} />
