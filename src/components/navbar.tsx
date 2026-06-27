@@ -10,7 +10,6 @@ import {
   TrendingUp,
   GraduationCap,
   Heart,
-  CalendarDays,
 } from "lucide-react";
 import { useEffect } from "react";
 import { cn } from "@/lib/utils";
@@ -23,7 +22,6 @@ const NAV_ITEMS = [
   { href: "/team-builder", i18nKey: "nav.teamBuilder", icon: Users },
   { href: "/battle-bot", i18nKey: "nav.battleBot", icon: Swords },
   { href: "/meta", i18nKey: "nav.meta", icon: TrendingUp },
-  { href: "/events", i18nKey: "nav.tournaments", icon: CalendarDays },
   { href: "/learn", i18nKey: "nav.pokeSchool", icon: GraduationCap },
   { href: "/about", i18nKey: "nav.about", icon: Heart },
 ];
@@ -100,7 +98,7 @@ export function Navbar() {
                   <Link
                     key={item.href}
                     href={item.href}
-                    onClick={() => trackEvent("nav_click", "navigation", item.label)}
+                    onClick={() => trackEvent("nav_click", "navigation", t(item.i18nKey))}
                     className={cn(
                       "relative px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-1.5 whitespace-nowrap",
                       isActive
@@ -109,7 +107,7 @@ export function Navbar() {
                     )}
                   >
                     <item.icon className="w-4 h-4" />
-                    <span>{item.label}</span>
+                    <span>{t(item.i18nKey)}</span>
                   </Link>
                 );
               })}
