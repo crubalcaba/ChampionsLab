@@ -36,7 +36,17 @@ Only when the user issues an **explicit, unambiguous command** like:
 - "push to main now"
 - "merge this PR for me"
 
-A vague "let's update master with X" is **not** explicit enough — ask first, or default to the branch + PR flow.
+A vague "let's update master with X" or "add X to master" is **not** explicit enough — default to the branch + PR flow. If unsure, ask once; do not assume.
+
+### What the rule does **not** mean
+
+The rule protects `main` and `master` only. It is **not** an instruction to wrap every change in a branch + PR.
+
+- Normal iterative work on an already-checked-out feature branch → just commit. No new branch, no new PR per change.
+- Hot-fixing a typo in a doc on a feature branch → just commit.
+- Adding a third commit to an in-flight feature → just commit and `git push` the existing branch (this updates the open PR automatically).
+
+The branch + PR ceremony only kicks in when: (a) `HEAD` is on `main` / `master`, or (b) the user explicitly asks for a PR.
 
 ## 2. Never auto-merge a PR
 
