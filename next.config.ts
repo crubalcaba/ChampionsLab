@@ -4,10 +4,15 @@ const nextConfig: NextConfig = {
   // Types verified via standalone `npx tsc --noEmit --skipLibCheck`.
   // Next 16 Turbopack's built-in TS check OOMs on this project (16 GB RAM, 9 workers).
   typescript: { ignoreBuildErrors: true },
+  // Fully static export — produces ./out/ for the Electron portable bundle.
+  // No server, no API routes, no runtime image optimizer.
+  output: "export",
   experimental: {
     optimizePackageImports: ["framer-motion"],
   },
   images: {
+    // Static export has no /_next/image route. <Image> degrades to plain <img>.
+    unoptimized: true,
     remotePatterns: [
       {
         protocol: "https",
@@ -21,6 +26,8 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  // NOTE: headers() is ignored by `output: "export"` (no server to apply them).
+  // Kept here so a future server build would still pick them up.
   headers: async () => [
     {
       source: "/(.*)",

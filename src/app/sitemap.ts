@@ -1,5 +1,8 @@
 import type { MetadataRoute } from "next";
 
+// Required by `output: "export"` — pre-rendered once at build time.
+export const dynamic = "force-static";
+
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = "https://championslab.xyz";
   return [
