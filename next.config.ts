@@ -7,6 +7,10 @@ const nextConfig: NextConfig = {
   // Fully static export — produces ./out/ for the Electron portable bundle.
   // No server, no API routes, no runtime image optimizer.
   output: "export",
+  // Each route becomes <route>/index.html instead of <route>.html, so the
+  // Electron protocol handler in electron/main.cjs can resolve clean URLs
+  // (file:///.../out/team-builder/) to the right HTML file on hard reload.
+  trailingSlash: true,
   experimental: {
     optimizePackageImports: ["framer-motion"],
   },
@@ -26,21 +30,6 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  // NOTE: headers() is ignored by `output: "export"` (no server to apply them).
-  // Kept here so a future server build would still pick them up.
-  headers: async () => [
-    {
-      source: "/(.*)",
-      headers: [
-        { key: "X-Content-Type-Options", value: "nosniff" },
-        { key: "X-Frame-Options", value: "DENY" },
-        { key: "X-XSS-Protection", value: "1; mode=block" },
-        { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
-        { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=()" },
-        { key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains; preload" },
-      ],
-    },
-  ],
 };
 
 export default nextConfig;
