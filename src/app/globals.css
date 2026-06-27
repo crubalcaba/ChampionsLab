@@ -11,6 +11,7 @@
   --font-sans: var(--font-sans);
   --font-mono: var(--font-mono);
   --font-heading: var(--font-heading);
+  --font-emoji: var(--font-emoji);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -54,6 +55,18 @@
   --color-neon-cyan: #06b6d4;
   --color-neon-green: #22c55e;
   --color-neon-gold: #eab308;
+}
+
+/* Global emoji font: prefer Apple Color Emoji (Telegram-identical on Apple
+   devices), then fall back to the bundled Noto Color Emoji (loaded via
+   next/font in layout.tsx) so non-Apple platforms get a consistent colorful
+   set, and finally Segoe UI Emoji / Symbol as last-resort system fallbacks. */
+html, body {
+  font-family: var(--font-sans), ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", Roboto, "Helvetica Neue", Arial,
+    "Apple Color Emoji",
+    var(--font-emoji), "Noto Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol";
 }
 
 /* Team Builder: right column spans full width in the 2-col range (xl to <1730px) */

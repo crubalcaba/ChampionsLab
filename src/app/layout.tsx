@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import { cookies } from "next/headers";
-import { Inter, JetBrains_Mono, Sora } from "next/font/google";
+import { Inter, JetBrains_Mono, Sora, Noto_Color_Emoji } from "next/font/google";
 import "./globals.css";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
@@ -26,6 +26,13 @@ const sora = Sora({
 const jetbrainsMono = JetBrains_Mono({
   variable: "--font-mono",
   subsets: ["latin"],
+});
+
+const notoColorEmoji = Noto_Color_Emoji({
+  variable: "--font-emoji",
+  weight: "400",
+  subsets: ["emoji"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -89,7 +96,7 @@ export default async function RootLayout({
   return (
     <html
       lang={initialLocale.split("-")[0]}
-      className={`${inter.variable} ${sora.variable} ${jetbrainsMono.variable} h-full antialiased ${isDark ? "dark" : ""}`}
+      className={`${inter.variable} ${sora.variable} ${jetbrainsMono.variable} ${notoColorEmoji.variable} h-full antialiased ${isDark ? "dark" : ""}`}
       style={{ colorScheme: isDark ? "dark" : "light" }}
       suppressHydrationWarning
     >
