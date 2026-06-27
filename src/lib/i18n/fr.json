@@ -1053,6 +1053,7 @@
       "p3": "Nous pensons que la communauté Pokémon compétitive mérite des outils de qualité sans avoir à les payer. Si Champions Lab vous est utile, la meilleure façon de nous soutenir est de le partager avec vos amis et vos compagnons dresseurs !"
     },
     "credits": {
+      "attribution": "<strong>Tout le mérite revient aux développeurs originaux de Champions Lab.</strong> Ceci est un fork non officiel de fans — visitez l'original sur <a href=\"https://championslab.xyz\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"font-semibold text-violet-600 hover:text-violet-700 underline underline-offset-2\">championslab.xyz</a> pour la vraie version.",
       "p1": "<strong>L'équipe Champions Lab</strong> - Design, développement, moteur de combat, curation des données, et tout le reste. Nous sommes une petite équipe dévouée qui consacre des heures à faire de ceci le meilleur outil Pokémon compétitif qui soit.",
       "p2": "Un immense merci à la <strong>communauté Pokémon compétitive</strong> pour l'inspiration constante, aux organisateurs de tournois qui rendent le VGC possible, et à chaque joueur qui a partagé une équipe, écrit un guide ou aidé un débutant.",
       "p3": "Merci tout particulièrement à tous ceux qui ont signalé des bugs, suggéré des fonctionnalités ou juste dit quelque chose de gentil. Ce projet existe grâce à vous."
@@ -1343,6 +1344,7 @@
   },
   "footer": {
     "disclaimer": "Champions Lab is an unofficial fan project and is not affiliated with, endorsed by, or sponsored by Nintendo, The Pokémon Company International, Game Freak Inc., or Creatures Inc. Pokémon and Pokémon character names are trademarks of Nintendo.",
+    "attribution": "Tout le mérite revient au <a href=\"https://championslab.xyz\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"font-medium underline underline-offset-2 hover:text-foreground\">Champions Lab</a> original — championslab.xyz",
     "privacy": "Privacy Policy",
     "terms": "Terms of Service",
     "cookieSettings": "Cookie Settings"

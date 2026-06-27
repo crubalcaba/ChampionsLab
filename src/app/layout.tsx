@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import { cookies } from "next/headers";
-import { Inter, JetBrains_Mono, Sora, Noto_Color_Emoji } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
@@ -9,34 +8,46 @@ import { LazyParticles } from "@/components/lazy-particles";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { ThemeInit } from "@/components/theme-init";
 import { MobileNavInit } from "@/components/mobile-nav-init";
-import { CookieConsent } from "@/components/cookie-consent";
 import { I18nProvider } from "@/lib/i18n";
 
-const inter = Inter({
+const inter = localFont({
   variable: "--font-sans",
-  subsets: ["latin"],
-});
-
-const sora = Sora({
-  variable: "--font-heading",
-  subsets: ["latin"],
-  weight: ["600", "700"],
-});
-
-const jetbrainsMono = JetBrains_Mono({
-  variable: "--font-mono",
-  subsets: ["latin"],
-});
-
-const notoColorEmoji = Noto_Color_Emoji({
-  variable: "--font-emoji",
-  weight: "400",
-  subsets: ["emoji"],
+  src: "./fonts/Inter-Variable.woff2",
   display: "swap",
 });
 
+const sora = localFont({
+  variable: "--font-heading",
+  src: "./fonts/Sora-Variable.woff2",
+  display: "swap",
+});
+
+const jetbrainsMono = localFont({
+  variable: "--font-mono",
+  src: "./fonts/JetBrainsMono-Variable.woff2",
+  display: "swap",
+});
+
+const notoColorEmoji = localFont({
+  variable: "--font-emoji",
+  src: "./fonts/NotoColorEmoji.woff2",
+  display: "swap",
+});
+
+// Inline script that runs before React hydrates. Reads localStorage to set
+// <html lang> + dark class, eliminating the FOUC.
+const NO_FOUC_SCRIPT = `
+(function(){try{
+  var l=localStorage.getItem("championslab-lang");
+  if(l){document.documentElement.lang=l.split("-")[0];}
+  var t=localStorage.getItem("championslab-theme");
+  if(t==="dark"){document.documentElement.classList.add("dark");document.documentElement.style.colorScheme="dark";}
+  else{document.documentElement.style.colorScheme="light";}
+}catch(e){}})();
+`;
+
 export const metadata: Metadata = {
-  title: "Champions Lab - Pokémon Champions 2026",
+  title: "Not exactly Champions Lab - Pokémon Champions 2026",
   description:
     "The ultimate competitive companion for Pokémon Champions. Season tracking, team builder, battle simulator, and deep Pokémon data - all in one immersive hub.",
   keywords: ["Pokemon Champions", "VGC", "team builder", "battle simulator", "competitive Pokemon", "Pokemon Champions 2026", "VGC team builder", "Pokemon meta"],
@@ -49,10 +60,10 @@ export const metadata: Metadata = {
     apple: "/apple-touch-icon.png",
   },
   openGraph: {
-    title: "Champions Lab - Pokémon Champions 2026",
+    title: "Not exactly Champions Lab - Pokémon Champions 2026",
     description: "The ultimate competitive companion for Pokémon Champions. Team builder, battle simulator, META analysis, and VGC learning - all in one hub.",
     url: "https://championslab.xyz",
-    siteName: "Champions Lab",
+    siteName: "Not exactly Champions Lab",
     type: "website",
     locale: "en_US",
     images: [
@@ -60,13 +71,13 @@ export const metadata: Metadata = {
         url: "/opengraph-image",
         width: 1200,
         height: 630,
-        alt: "Champions Lab - Pokémon Champions 2026",
+        alt: "Not exactly Champions Lab - Pokémon Champions 2026",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Champions Lab - Pokémon Champions 2026",
+    title: "Not exactly Champions Lab - Pokémon Champions 2026",
     description: "The ultimate competitive companion for Pokémon Champions. Team builder, battle simulator, META analysis & more.",
     images: ["/opengraph-image"],
   },
@@ -83,28 +94,23 @@ export const metadata: Metadata = {
   },
 };
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const cookieStore = await cookies();
-  const initialLocale = cookieStore.get("cl-lang")?.value ?? "en";
-  const themeCookie = cookieStore.get("cl-theme")?.value;
-  const isDark = themeCookie === "dark";
-
   return (
     <html
-      lang={initialLocale.split("-")[0]}
-      className={`${inter.variable} ${sora.variable} ${jetbrainsMono.variable} ${notoColorEmoji.variable} h-full antialiased ${isDark ? "dark" : ""}`}
-      style={{ colorScheme: isDark ? "dark" : "light" }}
+      lang="en"
+      className={`${inter.variable} ${sora.variable} ${jetbrainsMono.variable} ${notoColorEmoji.variable} h-full antialiased`}
       suppressHydrationWarning
     >
-      <head />
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: NO_FOUC_SCRIPT }} />
+      </head>
       <body className="min-h-full flex flex-col bg-background text-foreground">
-        <I18nProvider initialLocale={initialLocale}>
+        <I18nProvider>
         <LazyParticles />
-        <CookieConsent />
         {/* Pure HTML hamburger  -  works instantly, no React hydration needed */}
         <button
           id="mobile-nav-toggle"

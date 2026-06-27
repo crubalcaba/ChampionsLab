@@ -4,10 +4,19 @@ const nextConfig: NextConfig = {
   // Types verified via standalone `npx tsc --noEmit --skipLibCheck`.
   // Next 16 Turbopack's built-in TS check OOMs on this project (16 GB RAM, 9 workers).
   typescript: { ignoreBuildErrors: true },
+  // Fully static export — produces ./out/ for the Electron portable bundle.
+  // No server, no API routes, no runtime image optimizer.
+  output: "export",
+  // Each route becomes <route>/index.html instead of <route>.html, so the
+  // Electron protocol handler in electron/main.cjs can resolve clean URLs
+  // (file:///.../out/team-builder/) to the right HTML file on hard reload.
+  trailingSlash: true,
   experimental: {
     optimizePackageImports: ["framer-motion"],
   },
   images: {
+    // Static export has no /_next/image route. <Image> degrades to plain <img>.
+    unoptimized: true,
     remotePatterns: [
       {
         protocol: "https",
@@ -21,19 +30,6 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  headers: async () => [
-    {
-      source: "/(.*)",
-      headers: [
-        { key: "X-Content-Type-Options", value: "nosniff" },
-        { key: "X-Frame-Options", value: "DENY" },
-        { key: "X-XSS-Protection", value: "1; mode=block" },
-        { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
-        { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=()" },
-        { key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains; preload" },
-      ],
-    },
-  ],
 };
 
 export default nextConfig;

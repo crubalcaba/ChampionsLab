@@ -10,8 +10,6 @@ import {
   TrendingUp,
   GraduationCap,
   Heart,
-  CalendarDays,
-  ShoppingBag,
 } from "lucide-react";
 import { useEffect } from "react";
 import { cn } from "@/lib/utils";
@@ -24,7 +22,6 @@ const NAV_ITEMS = [
   { href: "/team-builder", i18nKey: "nav.teamBuilder", icon: Users },
   { href: "/battle-bot", i18nKey: "nav.battleBot", icon: Swords },
   { href: "/meta", i18nKey: "nav.meta", icon: TrendingUp },
-  { href: "/events", i18nKey: "nav.tournaments", icon: CalendarDays },
   { href: "/learn", i18nKey: "nav.pokeSchool", icon: GraduationCap },
   { href: "/about", i18nKey: "nav.about", icon: Heart },
 ];
@@ -52,14 +49,17 @@ export function Navbar() {
               <div className="transition-transform duration-150 group-hover:scale-105 group-active:scale-95">
                 <Image
                   src="/logo.png"
-                  alt="Champions Lab"
+                  alt="Not exactly Champions Lab"
                   width={76}
                   height={60}
                   className="-my-3"
                   unoptimized
                 />
               </div>
-              <div className="hidden sm:block">
+              <div className="hidden sm:block leading-none">
+                <span className="block text-[9px] font-medium tracking-widest uppercase text-muted-foreground/80 -mb-0.5">
+                  Not exactly
+                </span>
                 <span className="text-lg font-bold tracking-tight whitespace-nowrap bg-gradient-to-r from-emerald-400 via-teal-500 to-cyan-500 bg-clip-text text-transparent font-heading">
                   Champions Lab
                 </span>
@@ -90,29 +90,6 @@ export function Navbar() {
                   </Link>
                 );
               })}
-              <div className="ml-2 inline-flex rounded-lg overflow-hidden shadow-sm shadow-orange-500/20 bg-gradient-to-r from-yellow-400 to-orange-500">
-                <a
-                  href="https://shop.championslab.xyz/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={() => trackEvent("shop_click", "engagement", "desktop")}
-                  className="flex-1 justify-center px-3 py-2 text-sm font-semibold text-white hover:bg-white/20 flex items-center gap-1.5 transition-colors whitespace-nowrap"
-                >
-                  <ShoppingBag className="w-4 h-4" />
-                  <span>{t("nav.shop")}</span>
-                </a>
-                <div className="w-px bg-white/30 my-1.5" />
-                <a
-                  href="https://buymeacoffee.com/championslab"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={() => trackEvent("support_click", "engagement", "desktop")}
-                  className="flex-1 justify-center px-3 py-2 text-sm font-semibold text-white hover:bg-white/20 flex items-center gap-1.5 transition-colors whitespace-nowrap"
-                >
-                  <ShoppingBag className="w-4 h-4" />
-                  <span>{t("nav.supportUs")}</span>
-                </a>
-              </div>
               <LanguageSelector />
             </nav>
 
@@ -124,7 +101,7 @@ export function Navbar() {
                   <Link
                     key={item.href}
                     href={item.href}
-                    onClick={() => trackEvent("nav_click", "navigation", item.label)}
+                    onClick={() => trackEvent("nav_click", "navigation", t(item.i18nKey))}
                     className={cn(
                       "relative px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-1.5 whitespace-nowrap",
                       isActive
@@ -133,7 +110,7 @@ export function Navbar() {
                     )}
                   >
                     <item.icon className="w-4 h-4" />
-                    <span>{item.label}</span>
+                    <span>{t(item.i18nKey)}</span>
                   </Link>
                 );
               })}
@@ -165,29 +142,6 @@ export function Navbar() {
               </Link>
             );
           })}
-          <div className="flex rounded-lg overflow-hidden bg-gradient-to-r from-yellow-400 to-orange-500">
-            <a
-              href="https://shop.championslab.xyz/"
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={() => trackEvent("shop_click", "engagement", "mobile")}
-              className="flex-1 flex items-center justify-center gap-2 px-4 py-3 text-sm font-semibold text-white hover:bg-white/20 transition-colors"
-            >
-              <ShoppingBag className="w-5 h-5" />
-              {t("nav.shop")}
-            </a>
-            <div className="w-px bg-white/30 my-2" />
-            <a
-              href="https://buymeacoffee.com/championslab"
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={() => trackEvent("support_click", "engagement", "mobile")}
-              className="flex-1 flex items-center justify-center gap-2 px-4 py-3 text-sm font-semibold text-white hover:bg-white/20 transition-colors"
-            >
-              <ShoppingBag className="w-5 h-5" />
-              {t("nav.supportUs")}
-            </a>
-          </div>
           <div className="px-4 pt-2">
             <LanguageSelector mobile />
           </div>

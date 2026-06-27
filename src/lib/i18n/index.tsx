@@ -186,12 +186,11 @@ const I18nContext = createContext<I18nContextValue | null>(null);
 export function I18nProvider({ children, initialLocale = "en" }: { children: ReactNode; initialLocale?: string }) {
   const [locale, setLocaleState] = useState<Locale>(initialLocale as Locale);
 
-  // Sync localStorage → state on mount (handles stale-cookie edge case)
+  // Sync localStorage → state on mount (handles stale state edge case)
   useEffect(() => {
     const stored = localStorage.getItem("championslab-lang") as Locale | null;
     if (stored && stored !== locale) {
       setLocaleState(stored);
-      document.cookie = `cl-lang=${stored};path=/;max-age=31536000;SameSite=Lax`;
       document.documentElement.lang = stored.split("-")[0];
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
@@ -199,7 +198,6 @@ export function I18nProvider({ children, initialLocale = "en" }: { children: Rea
   const setLocale = useCallback((l: Locale) => {
     setLocaleState(l);
     localStorage.setItem("championslab-lang", l);
-    document.cookie = `cl-lang=${l};path=/;max-age=31536000;SameSite=Lax`;
     document.documentElement.lang = l.split("-")[0];
   }, []);
 

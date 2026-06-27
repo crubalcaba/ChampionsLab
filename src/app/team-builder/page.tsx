@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo, useCallback, useRef } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import { motion, AnimatePresence } from "@/lib/motion";
 import Image from "next/image";
 import { LastUpdated } from "@/components/last-updated";
@@ -8,7 +8,7 @@ import {
   Plus, X, Download, Upload, Copy, Trash2, Shield, Zap, Swords,
   ChevronDown, ChevronUp, Check, AlertTriangle, Sparkles, Star,
   Users, Brain, Target, Award, Minus, Settings2,
-  Save, FolderOpen, Share2, SlidersHorizontal, ExternalLink,
+  Save, FolderOpen, Share2, SlidersHorizontal,
 } from "lucide-react";
 import { POKEMON_SEED, STAT_PRESETS } from "@/lib/pokemon-data";
 import {
@@ -49,15 +49,12 @@ import {
 } from "@/lib/engine/picker-roles";
 import {
   getSavedTeams, saveTeam, deleteTeam, deserializeTeam, saveLastTeam, getLastTeam,
-  serializeTeam,
-  type SavedTeam, type SavedTeamSlot,
+  type SavedTeam,
 } from "@/lib/storage";
 import {
   CHAMPIONS_TOURNAMENT_TEAMS,
   type ChampionsTournamentTeam,
 } from "@/lib/simulation-data";
-import { deflateRaw, inflateRaw } from "pako";
-import QRCode from "qrcode";
 import { useI18n } from "@/lib/i18n";
 
 const EMPTY_STAT_POINTS: StatPoints = { hp: 0, attack: 0, defense: 0, spAtk: 0, spDef: 0, speed: 0 };
@@ -239,14 +236,9 @@ export default function TeamBuilderPage() {
   const [editMode, setEditMode] = useState<"normal" | "speed" | "survival" | "damage">("normal");
   const [spToast, setSpToast] = useState<string | null>(null);
 
-  const [shareLinkError, setShareLinkError] = useState<string | null>(null);
   const [showMoreTournament, setShowMoreTournament] = useState(false);
   const [showMoreCurated, setShowMoreCurated] = useState(false);
-  const [pasteHideNature, setPasteHideNature] = useState(false);
-  const [pasteHideStatPoints, setPasteHideStatPoints] = useState(false);
-  const [pasteHideItem, setPasteHideItem] = useState(false);
-  const [pasteHideAbility, setPasteHideAbility] = useState(false);
-  const [pasteLinkCopied, setPasteLinkCopied] = useState(false);
+  const [pasteCopied, setPasteCopied] = useState(false);
 
 
 
@@ -264,101 +256,10 @@ export default function TeamBuilderPage() {
     setShuffledTeams(shuffled);
   }, []);
 
-  // Build shareable URL - store team on server, return short link
-  const buildShareUrl = useCallback(async () => {
-    const filled = slots.filter(s => s.pokemon);
-    if (filled.length === 0) return "";
-    const data = {
-      n: teamName,
-      s: serializeTeam(slots).map(s => ({
-        p: s.pokemonId,
-        a: s.ability,
-        t: s.nature,
-        m: s.moves,
-        sp: [s.statPoints.hp, s.statPoints.attack, s.statPoints.defense, s.statPoints.spAtk, s.statPoints.spDef, s.statPoints.speed],
-        te: s.teraType,
-        i: s.item,
-        mg: s.isMega,
-        pa: s.preMegaAbility,
-      })),
-    };
-    try {
-      const res = await fetch("/api/share", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
-      if (res.ok) {
-        const { id } = await res.json();
-        return `${window.location.origin}/team-builder?s=${id}`;
-      }
-    } catch { /* fall through to compressed fallback */ }
-    // Fallback: compressed URL
-    const compressed = deflateRaw(JSON.stringify(data));
-    const b64 = btoa(String.fromCharCode(...compressed))
-      .replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
-    return `${window.location.origin}/team-builder?t=${b64}`;
-  }, [slots, teamName]);
-
-  // Load saved teams on mount + restore last team if available OR load from share URL
+  // Load saved teams on mount + restore last team if available
   useEffect(() => {
     setSavedTeams(getSavedTeams());
 
-    // Check for shared team URL first
-    const params = new URLSearchParams(window.location.search);
-    const shortId = params.get("s");
-    const teamParam = params.get("t") || params.get("team"); // "t" = compressed, "team" = legacy
-
-    const restoreTeam = (data: { n?: string; s: Array<{ p: number; a?: string; t?: string; m: string[]; sp: number[]; te?: string; i?: string; mg?: boolean; mgi?: number; pa?: string }> }) => {
-      const restored: SavedTeamSlot[] = data.s.map(s => ({
-        pokemonId: s.p,
-        ability: s.a,
-        nature: s.t,
-        moves: s.m || [],
-        statPoints: { hp: s.sp?.[0] || 0, attack: s.sp?.[1] || 0, defense: s.sp?.[2] || 0, spAtk: s.sp?.[3] || 0, spDef: s.sp?.[4] || 0, speed: s.sp?.[5] || 0 },
-        teraType: s.te as PokemonType | undefined,
-        item: s.i,
-        isMega: s.mg,
-        megaFormIndex: s.mgi,
-        preMegaAbility: s.pa,
-      }));
-      setSlots(deserializeTeam(restored));
-      setTeamName(data.n || t('teamBuilder.sharedTeam'));
-      window.history.replaceState({}, "", "/team-builder");
-    };
-
-    // Short link: fetch from API
-    if (shortId) {
-      fetch(`/api/share/${encodeURIComponent(shortId)}`)
-        .then(r => {
-          if (!r.ok) { setShareLinkError(t('teamBuilder.sharedExpired')); window.history.replaceState({}, "", "/team-builder"); return null; }
-          return r.json();
-        })
-        .then(data => { if (data?.s) restoreTeam(data); })
-        .catch(() => { setShareLinkError(t('teamBuilder.sharedFailed')); window.history.replaceState({}, "", "/team-builder"); });
-      return;
-    }
-
-    if (teamParam) {
-      try {
-        let data;
-        if (params.has("t")) {
-          // Compressed: URL-safe base64 → deflateRaw → JSON
-          const b64 = teamParam.replace(/-/g, "+").replace(/_/g, "/");
-          const binary = atob(b64);
-          const bytes = new Uint8Array(binary.length);
-          for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
-          data = JSON.parse(new TextDecoder().decode(inflateRaw(bytes)));
-        } else {
-          // Legacy uncompressed
-          data = JSON.parse(atob(teamParam));
-        }
-        if (data.s && Array.isArray(data.s)) {
-          restoreTeam(data);
-          return;
-        }
-      } catch { /* invalid param, fall through to normal load */ }
-    }
 
     const last = getLastTeam();
     if (last && last.slots.length > 0) {
@@ -433,9 +334,6 @@ export default function TeamBuilderPage() {
     const filled = slots.filter(s => s.pokemon);
     if (filled.length === 0) return;
 
-    // Build share URL first so we can generate a QR code
-    const shareUrlForQR = await buildShareUrl();
-    if (shareUrlForQR) setShareUrl(shareUrlForQR);
 
     const W = 1200, cardH = 200, headerH = 140, footerH = 60;
     const H = headerH + Math.ceil(filled.length / 2) * cardH + footerH;
@@ -491,25 +389,6 @@ export default function TeamBuilderPage() {
       img.src = "/logo.png";
     });
 
-    // Generate QR code image from share URL
-    let qrImage: HTMLImageElement | null = null;
-    if (shareUrlForQR) {
-      try {
-        const qrDataUrl = await QRCode.toDataURL(shareUrlForQR, {
-          width: 200,
-          margin: 1,
-          color: { dark: "#ffffffee", light: "#00000000" },
-          errorCorrectionLevel: "M",
-        });
-        qrImage = await new Promise<HTMLImageElement | null>((resolve) => {
-          const img = new window.Image();
-          img.onload = () => resolve(img);
-          img.onerror = () => resolve(null);
-          img.src = qrDataUrl;
-        });
-      } catch { /* QR generation failed, skip it */ }
-    }
-
     ctx.textAlign = "right";
     ctx.fillStyle = "#ffffff";
     ctx.font = "bold 36px Inter, system-ui, sans-serif";
@@ -522,37 +401,13 @@ export default function TeamBuilderPage() {
     ctx.fillText("championslab.xyz", W - 40, 80);
 
     // Position logo to left of brand text
-    let logoRightEdge = W - 40 - brandWidth - 14;
+    const logoRightEdge = W - 40 - brandWidth - 14;
     if (logo) {
       ctx.imageSmoothingEnabled = true;
       ctx.imageSmoothingQuality = "high";
       const logoW = 120;
       const logoH = 80;
       ctx.drawImage(logo, logoRightEdge - logoW, 10, logoW, logoH);
-      logoRightEdge = logoRightEdge - logoW - 14;
-    }
-
-    // Draw QR code to the left of the logo
-    if (qrImage) {
-      const qrSize = 86;
-      const qrX = logoRightEdge - qrSize;
-      const qrY = 8;
-      // Subtle rounded background behind QR
-      ctx.fillStyle = "rgba(255,255,255,0.08)";
-      ctx.beginPath();
-      ctx.roundRect(qrX - 6, qrY - 2, qrSize + 12, qrSize + 16, 10);
-      ctx.fill();
-      ctx.strokeStyle = "rgba(255,255,255,0.15)";
-      ctx.lineWidth = 1;
-      ctx.stroke();
-      ctx.imageSmoothingEnabled = true;
-      ctx.imageSmoothingQuality = "high";
-      ctx.drawImage(qrImage, qrX, qrY, qrSize, qrSize);
-      // "Scan to import" label below QR
-      ctx.fillStyle = "rgba(255,255,255,0.5)";
-      ctx.font = "bold 8px Inter, system-ui, sans-serif";
-      ctx.textAlign = "center";
-      ctx.fillText(t('teamBuilder.scanToImport').toUpperCase(), qrX + qrSize / 2, qrY + qrSize + 10);
     }
     ctx.textAlign = "left";
 
@@ -687,7 +542,6 @@ export default function TeamBuilderPage() {
 
     const dataUrl = canvas.toDataURL("image/png");
     setShareImageUrl(dataUrl);
-    setUrlCopied(false);
     setShowShare(true);
   };
 
@@ -700,67 +554,59 @@ export default function TeamBuilderPage() {
     a.click();
   };
 
-  const [shareUrl, setShareUrl] = useState("");
-  const [urlCopied, setUrlCopied] = useState(false);
-  const [pasteUrl, setPasteUrl] = useState("");
-  const [pasteGenerating, setPasteGenerating] = useState(false);
-
-  const copyShareUrl = async () => {
-    trackEvent("copy_share_url", "team_builder", teamName);
-    if (!shareUrl) return;
-    await navigator.clipboard.writeText(shareUrl);
-    setUrlCopied(true);
-    setTimeout(() => setUrlCopied(false), 2000);
+  // Build Showdown-style PokéPaste text from the current team
+  const buildPokePasteText = () => {
+    return slots
+      .filter(s => s.pokemon)
+      .map(s => {
+        const p = s.pokemon!;
+        const megaForms = p.forms?.filter(f => f.isMega && !f.hidden) ?? [];
+        const activeMega = s.isMega ? megaForms[s.megaFormIndex ?? 0] : null;
+        let exportName = activeMega?.name ?? (p.showdownName ?? p.name);
+        if (s.isMega && p.hasMega && !activeMega) {
+          exportName = megaForms.length > 1
+            ? `${p.name}-Mega-${s.megaFormIndex === 1 ? "Y" : "X"}`
+            : `${p.name}-Mega`;
+        }
+        // Gendered forms: "Basculegion-M" → "Basculegion", "Meowstic-M" → "Meowstic"
+        if (exportName.endsWith("-M") && !exportName.startsWith("Rotom")) {
+          exportName = exportName.slice(0, -2);
+        }
+        // Regional prefix → Showdown suffix: "Hisuian Samurott" → "Samurott-Hisui"
+        const regionalPrefixes: Record<string, string> = {
+          hisuian: "Hisui", alolan: "Alola", galarian: "Galar", paldean: "Paldea",
+        };
+        for (const [prefix, suffix] of Object.entries(regionalPrefixes)) {
+          if (exportName.toLowerCase().startsWith(prefix + " ")) {
+            exportName = `${exportName.slice(prefix.length + 1)}-${suffix}`;
+            break;
+          }
+        }
+        const nameLine = s.item ? `${exportName} @ ${s.item}` : exportName;
+        const lines = [nameLine];
+        if (s.ability) lines.push(`Ability: ${s.ability}`);
+        if (s.teraType) lines.push(`Tera Type: ${s.teraType.charAt(0).toUpperCase()}${s.teraType.slice(1)}`);
+        if (s.nature) lines.push(`${s.nature} Nature`);
+        {
+          const spParts = STAT_KEYS
+            .map(k => ({ val: s.statPoints[k], label: STAT_LABELS[k] }))
+            .filter(e => e.val > 0)
+            .map(e => `${e.val} ${e.label}`);
+          if (spParts.length > 0) lines.push(`EVs: ${spParts.join(" / ")}`);
+        }
+        s.moves.forEach(m => { if (m) lines.push(`- ${m}`); });
+        return lines.join("\n");
+      })
+      .join("\n\n");
   };
 
-  // Build a secure paste URL: creates a NEW share entry with hidden fields stripped
-  const buildPasteUrl = async () => {
-    const filled = slots.filter(s => s.pokemon);
-    if (filled.length === 0) return "";
-    const data = {
-      n: teamName,
-      s: serializeTeam(slots).map(s => ({
-        p: s.pokemonId,
-        a: pasteHideAbility ? undefined : s.ability,
-        t: pasteHideNature ? undefined : s.nature,
-        m: s.moves,
-        sp: pasteHideStatPoints ? [0, 0, 0, 0, 0, 0] : [s.statPoints.hp, s.statPoints.attack, s.statPoints.defense, s.statPoints.spAtk, s.statPoints.spDef, s.statPoints.speed],
-        i: pasteHideItem ? undefined : s.item,
-        mg: s.isMega,
-        pa: s.preMegaAbility,
-      })),
-    };
-    try {
-      const res = await fetch("/api/share", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
-      if (res.ok) {
-        const { id } = await res.json();
-        return `${window.location.origin}/paste?s=${id}`;
-      }
-    } catch { /* fall through to compressed fallback */ }
-    // Fallback: compressed URL
-    const compressed = deflateRaw(JSON.stringify(data));
-    const b64 = btoa(String.fromCharCode(...compressed))
-      .replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
-    return `${window.location.origin}/paste?t=${b64}`;
-  };
-
-  // Regenerate paste URL when hide options change
-  useEffect(() => {
-    if (!shareUrl) { setPasteUrl(""); return; }
-    setPasteGenerating(true);
-    buildPasteUrl().then(url => { setPasteUrl(url); setPasteGenerating(false); });
-  }, [pasteHideNature, pasteHideStatPoints, pasteHideItem, pasteHideAbility, shareUrl]);
-
-  const copyPasteUrl = async () => {
-    trackEvent("copy_paste_url", "team_builder", teamName);
-    if (!pasteUrl) return;
-    await navigator.clipboard.writeText(pasteUrl);
-    setPasteLinkCopied(true);
-    setTimeout(() => setPasteLinkCopied(false), 2000);
+  const copyPokePaste = async () => {
+    trackEvent("copy_pokepaste", "team_builder", teamName);
+    const text = buildPokePasteText();
+    if (!text) return;
+    await navigator.clipboard.writeText(text);
+    setPasteCopied(true);
+    setTimeout(() => setPasteCopied(false), 2000);
   };
 
   const filledSlots = slots.filter((s) => s.pokemon !== null);
@@ -1500,20 +1346,6 @@ export default function TeamBuilderPage() {
         </div>
       )}
 
-      {/* Shared link error */}
-      {shareLinkError && (
-        <motion.div
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="mb-6 p-4 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-between"
-        >
-          <div className="flex items-center gap-2 text-sm text-amber-400">
-            <AlertTriangle className="w-4 h-4 flex-shrink-0" />
-            {shareLinkError}
-          </div>
-          <button onClick={() => setShareLinkError(null)} className="text-amber-400/60 hover:text-amber-400 text-xs ml-4">{t('common.dismiss')}</button>
-        </motion.div>
-      )}
 
       {/* Validation errors */}
       {validationErrors.length > 0 && (
@@ -2696,85 +2528,31 @@ export default function TeamBuilderPage() {
               <div className="rounded-xl overflow-hidden border border-gray-200/60 mb-4">
                 <img src={shareImageUrl} alt="Team card" className="w-full" />
               </div>
-              {shareUrl && (
-                <div className="mb-4 flex items-center gap-2">
-                  <input
-                    type="text"
-                    readOnly
-                    value={shareUrl}
-                    className="flex-1 px-3 py-2 text-xs rounded-lg bg-gray-100 border border-gray-200 text-gray-600 truncate"
-                    onClick={(e) => (e.target as HTMLInputElement).select()}
-                  />
-                  <button
-                    onClick={copyShareUrl}
-                    className={cn("px-3 py-2 rounded-lg text-xs font-medium transition-all flex items-center gap-1.5", urlCopied ? "bg-green-100 text-green-700" : "bg-emerald-100 text-emerald-700 hover:bg-emerald-200")}
-                  >
-                    {urlCopied ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
-                    {urlCopied ? t('common.copied') : t('teamBuilder.copyLink')}
-                  </button>
-                </div>
-              )}
-              <div className="flex gap-2">
-                <button
-                  onClick={downloadShareImage}
-                  className="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 text-white text-sm font-medium flex items-center justify-center gap-2 hover:opacity-90 transition-opacity"
-                >
-                  <Download className="w-4 h-4" />
-                  {t('teamBuilder.downloadImage')}
-                </button>
-                <button
-                  onClick={copyShareUrl}
-                  className={cn("flex-1 py-2.5 rounded-xl text-sm font-medium flex items-center justify-center gap-2 transition-all", urlCopied ? "bg-green-100 text-green-700" : "glass glass-hover")}
-                >
-                  {urlCopied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-                  {urlCopied ? t('teamBuilder.linkCopied') : t('teamBuilder.copyLink')}
-                </button>
-              </div>
+              <button
+                onClick={downloadShareImage}
+                className="w-full py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 text-white text-sm font-medium flex items-center justify-center gap-2 hover:opacity-90 transition-opacity"
+              >
+                <Download className="w-4 h-4" />
+                {t('teamBuilder.downloadImage')}
+              </button>
 
               {/* Pokepaste Section */}
-              {shareUrl && (
-                <div className="mt-4 pt-4 border-t border-gray-200/60 dark:border-white/10">
-                  <h4 className="text-sm font-semibold mb-3 flex items-center gap-2">
-                    <ExternalLink className="w-4 h-4 text-indigo-500" />
-                    {t('teamBuilder.pokepaste')}
-                  </h4>
-                  <p className="text-[11px] text-muted-foreground mb-3">{t('teamBuilder.pokepasteDesc')}</p>
-                  <div className="flex flex-wrap gap-x-5 gap-y-2 mb-3">
-                    <label className="flex items-center gap-2 cursor-pointer text-xs">
-                      <input type="checkbox" checked={pasteHideNature} onChange={e => setPasteHideNature(e.target.checked)} className="rounded border-gray-300 text-indigo-500 focus:ring-indigo-500 w-3.5 h-3.5" />
-                      {t('teamBuilder.hideNature')}
-                    </label>
-                    <label className="flex items-center gap-2 cursor-pointer text-xs">
-                      <input type="checkbox" checked={pasteHideStatPoints} onChange={e => setPasteHideStatPoints(e.target.checked)} className="rounded border-gray-300 text-indigo-500 focus:ring-indigo-500 w-3.5 h-3.5" />
-                      {t('teamBuilder.hideStatPoints')}
-                    </label>
-                    <label className="flex items-center gap-2 cursor-pointer text-xs">
-                      <input type="checkbox" checked={pasteHideItem} onChange={e => setPasteHideItem(e.target.checked)} className="rounded border-gray-300 text-indigo-500 focus:ring-indigo-500 w-3.5 h-3.5" />
-                      {t('teamBuilder.hideItem')}
-                    </label>
-                    <label className="flex items-center gap-2 cursor-pointer text-xs">
-                      <input type="checkbox" checked={pasteHideAbility} onChange={e => setPasteHideAbility(e.target.checked)} className="rounded border-gray-300 text-indigo-500 focus:ring-indigo-500 w-3.5 h-3.5" />
-                      {t('teamBuilder.hideAbility')}
-                    </label>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <input
-                      type="text"
-                      readOnly
-                      value={pasteGenerating ? "..." : pasteUrl}
-                      className="flex-1 px-3 py-2 text-xs rounded-lg bg-gray-100 border border-gray-200 text-gray-600 truncate"
-                      onClick={(e) => (e.target as HTMLInputElement).select()}
-                    />
-                    <button
-                      onClick={copyPasteUrl}
-                      className={cn("px-3 py-2 rounded-lg text-xs font-medium transition-all flex items-center gap-1.5 shrink-0", pasteLinkCopied ? "bg-green-100 dark:bg-green-500/15 text-green-700 dark:text-green-400" : "bg-indigo-100 dark:bg-indigo-500/15 text-indigo-700 dark:text-indigo-400 hover:bg-indigo-200 dark:hover:bg-indigo-500/25")}
-                    >
-                      {pasteLinkCopied ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
-                      {pasteLinkCopied ? t('common.copied') : t('teamBuilder.copyPasteLink')}
-                    </button>
-                  </div>
-                </div>
-              )}
+              <div className="mt-4 pt-4 border-t border-gray-200/60 dark:border-white/10">
+                <h4 className="text-sm font-semibold mb-1">{t('teamBuilder.pokepaste')}</h4>
+                <p className="text-[11px] text-muted-foreground mb-3">{t('teamBuilder.pokepasteDesc')}</p>
+                <button
+                  onClick={copyPokePaste}
+                  className={cn(
+                    "w-full py-2.5 rounded-xl text-sm font-medium flex items-center justify-center gap-2 transition-all",
+                    pasteCopied
+                      ? "bg-green-100 dark:bg-green-500/15 text-green-700 dark:text-green-400"
+                      : "bg-indigo-100 dark:bg-indigo-500/15 text-indigo-700 dark:text-indigo-400 hover:bg-indigo-200 dark:hover:bg-indigo-500/25"
+                  )}
+                >
+                  {pasteCopied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                  {pasteCopied ? t('common.copied') : "Copy PokéPaste"}
+                </button>
+              </div>
             </motion.div>
           </>
         )}

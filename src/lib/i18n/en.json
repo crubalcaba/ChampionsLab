@@ -1053,6 +1053,7 @@
       "p3": "We believe the competitive Pokémon community deserves high-quality tools without having to pay for them. If you find Champions Lab useful, the best way to support us is to share it with your friends and fellow trainers!"
     },
     "credits": {
+      "attribution": "<strong>All credit goes to the original Champions Lab developers.</strong> This is an unofficial fan fork — visit the original at <a href=\"https://championslab.xyz\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"font-semibold text-violet-600 hover:text-violet-700 underline underline-offset-2\">championslab.xyz</a> for the real deal.",
       "p1": "<strong>Champions Lab Team</strong> - Design, development, battle engine, data curation, and everything in between. We're a small but dedicated team that pours hours into making this the best competitive Pokémon tool out there.",
       "p2": "Huge thanks to the <strong>competitive Pokémon community</strong> for the constant inspiration, the tournament organizers who make VGC possible, and every player who has shared a team, written a guide, or helped a newcomer.",
       "p3": "Special thanks to everyone who has reported bugs, suggested features, or just said something nice. This project exists because of you."
@@ -1343,6 +1344,7 @@
   },
   "footer": {
     "disclaimer": "Champions Lab is an unofficial fan project and is not affiliated with, endorsed by, or sponsored by Nintendo, The Pokémon Company International, Game Freak Inc., or Creatures Inc. Pokémon and Pokémon character names are trademarks of Nintendo.",
+    "attribution": "All credit to the original <a href=\"https://championslab.xyz\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"font-medium underline underline-offset-2 hover:text-foreground\">Champions Lab</a> — championslab.xyz",
     "privacy": "Privacy Policy",
     "terms": "Terms of Service",
     "cookieSettings": "Cookie Settings"
