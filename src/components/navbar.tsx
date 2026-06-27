@@ -11,7 +11,6 @@ import {
   GraduationCap,
   Heart,
   CalendarDays,
-  ShoppingBag,
 } from "lucide-react";
 import { useEffect } from "react";
 import { cn } from "@/lib/utils";
@@ -90,29 +89,6 @@ export function Navbar() {
                   </Link>
                 );
               })}
-              <div className="ml-2 inline-flex rounded-lg overflow-hidden shadow-sm shadow-orange-500/20 bg-gradient-to-r from-yellow-400 to-orange-500">
-                <a
-                  href="https://shop.championslab.xyz/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={() => trackEvent("shop_click", "engagement", "desktop")}
-                  className="flex-1 justify-center px-3 py-2 text-sm font-semibold text-white hover:bg-white/20 flex items-center gap-1.5 transition-colors whitespace-nowrap"
-                >
-                  <ShoppingBag className="w-4 h-4" />
-                  <span>{t("nav.shop")}</span>
-                </a>
-                <div className="w-px bg-white/30 my-1.5" />
-                <a
-                  href="https://buymeacoffee.com/championslab"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={() => trackEvent("support_click", "engagement", "desktop")}
-                  className="flex-1 justify-center px-3 py-2 text-sm font-semibold text-white hover:bg-white/20 flex items-center gap-1.5 transition-colors whitespace-nowrap"
-                >
-                  <ShoppingBag className="w-4 h-4" />
-                  <span>{t("nav.supportUs")}</span>
-                </a>
-              </div>
               <LanguageSelector />
             </nav>
 
@@ -165,29 +141,6 @@ export function Navbar() {
               </Link>
             );
           })}
-          <div className="flex rounded-lg overflow-hidden bg-gradient-to-r from-yellow-400 to-orange-500">
-            <a
-              href="https://shop.championslab.xyz/"
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={() => trackEvent("shop_click", "engagement", "mobile")}
-              className="flex-1 flex items-center justify-center gap-2 px-4 py-3 text-sm font-semibold text-white hover:bg-white/20 transition-colors"
-            >
-              <ShoppingBag className="w-5 h-5" />
-              {t("nav.shop")}
-            </a>
-            <div className="w-px bg-white/30 my-2" />
-            <a
-              href="https://buymeacoffee.com/championslab"
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={() => trackEvent("support_click", "engagement", "mobile")}
-              className="flex-1 flex items-center justify-center gap-2 px-4 py-3 text-sm font-semibold text-white hover:bg-white/20 transition-colors"
-            >
-              <ShoppingBag className="w-5 h-5" />
-              {t("nav.supportUs")}
-            </a>
-          </div>
           <div className="px-4 pt-2">
             <LanguageSelector mobile />
           </div>

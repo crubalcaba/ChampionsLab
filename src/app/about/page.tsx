@@ -1,75 +1,17 @@
 "use client";
 
-import { useState, useRef } from "react";
 import { motion } from "@/lib/motion";
-import Image from "next/image";
 import {
-  Heart, Code, Users, Mail, Send, ImagePlus, X, CheckCircle2,
-  AlertCircle, Loader2, Code2, Globe, Sparkles, Coffee, ChevronRight,
+  Heart, Code, Users,
+  AlertCircle, Code2, Globe, Sparkles,
   Shield,
 } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { trackEvent } from "@/lib/analytics";
 import { LastUpdated } from "@/components/last-updated";
 import { useI18n } from "@/lib/i18n";
 
 export default function AboutPage() {
-  const [form, setForm] = useState({ name: "", email: "", type: "feedback", message: "" });
-  const [image, setImage] = useState<File | null>(null);
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
-  const [sending, setSending] = useState(false);
-  const [result, setResult] = useState<{ ok: boolean; msg: string } | null>(null);
-  const fileRef = useRef<HTMLInputElement>(null);
   const { t } = useI18n();
 
-  const handleImage = (e: React.ChangeEvent<HTMLInputElement>) => {
-    trackEvent("image_upload", "about");
-    const file = e.target.files?.[0];
-    if (!file) return;
-    if (file.size > 5 * 1024 * 1024) {
-      setResult({ ok: false, msg: t("about.contact.imageTooLarge") });
-      return;
-    }
-    setImage(file);
-    const reader = new FileReader();
-    reader.onload = () => setImagePreview(reader.result as string);
-    reader.readAsDataURL(file);
-  };
-
-  const removeImage = () => {
-    setImage(null);
-    setImagePreview(null);
-    if (fileRef.current) fileRef.current.value = "";
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    trackEvent("contact_submit", "about", form.type);
-    setSending(true);
-    setResult(null);
-    try {
-      const fd = new FormData();
-      fd.append("name", form.name);
-      fd.append("email", form.email);
-      fd.append("type", form.type);
-      fd.append("message", form.message);
-      if (image) fd.append("image", image);
-
-      const res = await fetch("/api/contact", { method: "POST", body: fd });
-      const data = await res.json();
-      if (res.ok) {
-        setResult({ ok: true, msg: data.message });
-        setForm({ name: "", email: "", type: "feedback", message: "" });
-        removeImage();
-      } else {
-        setResult({ ok: false, msg: data.error });
-      }
-    } catch {
-      setResult({ ok: false, msg: t("about.contact.networkError") });
-    } finally {
-      setSending(false);
-    }
-  };
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -90,35 +32,6 @@ export default function AboutPage() {
             </p>
           </div>
         </div>
-      </motion.div>
-
-      {/* Discord Community */}
-      <motion.div
-        initial={{ opacity: 0, y: -10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.05 }}
-        className="mb-6"
-      >
-        <a
-          href="https://discord.gg/WShMRRSrtm"
-          target="_blank"
-          rel="noopener noreferrer"
-          onClick={() => trackEvent("discord_click", "about")}
-          className="flex items-center gap-4 p-4 rounded-2xl bg-[#5865F2]/10 border border-[#5865F2]/20 hover:bg-[#5865F2]/15 hover:border-[#5865F2]/30 transition-all group"
-        >
-          <div className="p-2.5 rounded-xl bg-[#5865F2] shadow-lg shadow-[#5865F2]/25 group-hover:shadow-[#5865F2]/40 transition-shadow">
-            <svg className="w-6 h-6 text-white" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286z" />
-            </svg>
-          </div>
-          <div className="flex-1 min-w-0">
-            <p className="text-sm font-bold text-[#5865F2] dark:text-[#7289DA]">{t("about.discord")}</p>
-            <p className="text-xs text-muted-foreground mt-0.5">
-              {t("about.discordDescription")}
-            </p>
-          </div>
-          <ChevronRight className="w-5 h-5 text-[#5865F2]/50 group-hover:text-[#5865F2] transition-colors shrink-0" />
-        </a>
       </motion.div>
 
       {/* Header */}
@@ -221,38 +134,7 @@ export default function AboutPage() {
               (_: string, label: string) => `<a href="https://github.com/Andrew21P/ChampionsLab" target="_blank" rel="noopener noreferrer" class="font-semibold text-emerald-600 hover:text-emerald-700 underline underline-offset-2">${label}</a>`
             ) }} />
             <p>{t("about.contribute.p3")}</p>
-            <a
-              href="https://buymeacoffee.com/championslab"
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={() => trackEvent("support_click", "about", "buymeacoffee")}
-              className="inline-flex items-center gap-2 mt-2 px-5 py-2.5 rounded-xl text-sm font-bold bg-gradient-to-r from-amber-400 to-yellow-500 text-gray-900 hover:from-amber-500 hover:to-yellow-600 transition-all shadow-md hover:shadow-lg"
-            >
-              <Coffee className="w-4 h-4" />
-              {t("about.supportBmc")}
-            </a>
           </div>
-        </div>
-
-        {/* Follow on X */}
-        <div className="glass rounded-2xl p-6 border border-sky-200/60 dark:border-sky-400/20 bg-gradient-to-br from-sky-50/40 to-blue-50/40 dark:from-sky-500/10 dark:to-blue-500/5">
-          <div className="flex items-center gap-3 mb-4">
-            <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" /></svg>
-            <h2 className="text-lg font-bold">{t("about.followX")}</h2>
-          </div>
-          <p className="text-sm text-muted-foreground leading-relaxed mb-4">
-            {t("about.followXDesc")}
-          </p>
-          <a
-            href="https://x.com/ChampionsLabXYZ"
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={() => trackEvent("twitter_click", "about", "follow")}
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold bg-gray-900 dark:bg-white/10 text-white dark:text-white hover:bg-gray-800 dark:hover:bg-white/15 transition-all shadow-md hover:shadow-lg dark:shadow-none dark:border dark:border-white/10"
-          >
-            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" /></svg>
-            @ChampionsLabXYZ
-          </a>
         </div>
 
         {/* Legal & Disclaimers */}
@@ -267,123 +149,6 @@ export default function AboutPage() {
             <p dangerouslySetInnerHTML={{ __html: t("about.legal.noAffiliation") }} />
             <p dangerouslySetInnerHTML={{ __html: t("about.legal.privacyTerms") }} />
           </div>
-        </div>
-
-        {/* Contact Form */}
-        <div className="glass rounded-2xl p-6 border border-amber-200/60 dark:border-amber-500/20 bg-gradient-to-br from-amber-50/40 to-orange-50/40 dark:from-amber-500/5 dark:to-orange-500/5">
-          <div className="flex items-center gap-3 mb-5">
-            <Mail className="w-5 h-5 text-amber-600" />
-            <h2 className="text-lg font-bold">{t("about.contactTitle")}</h2>
-          </div>
-          <p className="text-sm text-muted-foreground mb-5">
-            {t("about.contactDesc")}
-          </p>
-
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-xs font-semibold text-muted-foreground mb-1">{t("about.contact.name")}</label>
-                <input
-                  type="text"
-                  required
-                  maxLength={100}
-                  value={form.name}
-                  onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
-                  className="w-full px-3 py-2 rounded-xl border border-gray-200 dark:border-gray-400/25 bg-white/80 dark:bg-gray-200/5 text-sm text-gray-900 focus:outline-none focus:border-amber-400 dark:focus:border-amber-500/50 transition-colors"
-                  placeholder={t("about.contact.namePlaceholder")}
-                />
-              </div>
-              <div>
-                <label className="block text-xs font-semibold text-muted-foreground mb-1">{t("about.contact.email")}</label>
-                <input
-                  type="email"
-                  required
-                  maxLength={200}
-                  value={form.email}
-                  onChange={e => setForm(f => ({ ...f, email: e.target.value }))}
-                  className="w-full px-3 py-2 rounded-xl border border-gray-200 dark:border-gray-400/25 bg-white/80 dark:bg-gray-200/5 text-sm text-gray-900 focus:outline-none focus:border-amber-400 dark:focus:border-amber-500/50 transition-colors"
-                  placeholder={t("about.contact.emailPlaceholder")}
-                />
-              </div>
-            </div>
-
-            <div>
-              <label className="block text-xs font-semibold text-muted-foreground mb-1">{t("about.contact.type")}</label>
-              <select
-                value={form.type}
-                onChange={e => setForm(f => ({ ...f, type: e.target.value }))}
-                className="w-full px-3 py-2 rounded-xl border border-gray-200 dark:border-gray-400/25 bg-white/80 dark:bg-gray-200/5 text-sm text-gray-900 focus:outline-none focus:border-amber-400 dark:focus:border-amber-500/50 transition-colors"
-              >
-                <option value="feedback" className="dark:bg-[#111a2e]">{t("about.contact.feedback")}</option>
-                <option value="bug" className="dark:bg-[#111a2e]">{t("about.contact.bugReport")}</option>
-                <option value="feature" className="dark:bg-[#111a2e]">{t("about.contact.featureRequest")}</option>
-                <option value="other" className="dark:bg-[#111a2e]">{t("about.contact.other")}</option>
-              </select>
-            </div>
-
-            <div>
-              <label className="block text-xs font-semibold text-muted-foreground mb-1">{t("about.contact.message")}</label>
-              <textarea
-                required
-                maxLength={5000}
-                rows={5}
-                value={form.message}
-                onChange={e => setForm(f => ({ ...f, message: e.target.value }))}
-                className="w-full px-3 py-2 rounded-xl border border-gray-200 dark:border-gray-400/25 bg-white/80 dark:bg-gray-200/5 text-sm text-gray-900 focus:outline-none focus:border-amber-400 dark:focus:border-amber-500/50 transition-colors resize-none"
-                placeholder={t("about.contact.messagePlaceholder")}
-              />
-            </div>
-
-            {/* Image Upload */}
-            <div>
-              <label className="block text-xs font-semibold text-muted-foreground mb-1">{t("about.contact.screenshot")}</label>
-              {imagePreview ? (
-                <div className="relative inline-block">
-                  <Image src={imagePreview} alt="Preview" width={200} height={150} className="rounded-xl border border-gray-200 dark:border-gray-400/25 object-cover" unoptimized />
-                  <button
-                    type="button"
-                    onClick={removeImage}
-                    className="absolute -top-2 -right-2 p-1 bg-red-500 text-white rounded-full shadow-md hover:bg-red-600 transition-colors"
-                  >
-                    <X className="w-3 h-3" />
-                  </button>
-                </div>
-              ) : (
-                <button
-                  type="button"
-                  onClick={() => fileRef.current?.click()}
-                  className="flex items-center gap-2 px-4 py-3 rounded-xl border-2 border-dashed border-gray-300 dark:border-gray-400/25 bg-white/50 dark:bg-gray-200/5 text-sm text-muted-foreground hover:border-amber-400 dark:hover:border-amber-500/40 hover:text-amber-700 dark:hover:text-amber-400 transition-colors"
-                >
-                  <ImagePlus className="w-4 h-4" />
-                  {t("about.contact.addScreenshot")}
-                </button>
-              )}
-              <input
-                ref={fileRef}
-                type="file"
-                accept="image/*"
-                className="hidden"
-                onChange={handleImage}
-              />
-            </div>
-
-            {/* Result Message */}
-            {result && (
-              <div className={cn("flex items-center gap-2 px-4 py-3 rounded-xl text-sm font-medium", result.ok ? "bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-500/20" : "bg-red-50 dark:bg-red-500/10 text-red-700 dark:text-red-400 border border-red-200 dark:border-red-500/20")}>
-                {result.ok ? <CheckCircle2 className="w-4 h-4" /> : <AlertCircle className="w-4 h-4" />}
-                {result.msg}
-              </div>
-            )}
-
-            <button
-              type="submit"
-              disabled={sending}
-              className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 text-white font-semibold text-sm shadow-md shadow-amber-500/20 hover:from-amber-600 hover:to-orange-600 transition-all disabled:opacity-50"
-            >
-              {sending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
-              {sending ? t("about.contact.sending") : t("about.contact.send")}
-            </button>
-          </form>
         </div>
       </motion.div>
     </div>
