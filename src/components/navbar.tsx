@@ -48,7 +48,7 @@ export function Navbar() {
             <Link href="/" className="flex items-center gap-3 group">
               <div className="transition-transform duration-150 group-hover:scale-105 group-active:scale-95">
                 <Image
-                  src="/logo.png"
+                  src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/logo.png`}
                   alt="Not exactly Champions Lab"
                   width={76}
                   height={60}

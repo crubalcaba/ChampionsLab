@@ -3,6 +3,7 @@
 import { useState, useEffect, useMemo, useRef } from "react";
 import { motion, AnimatePresence } from "@/lib/motion";
 import Image from "next/image";
+import Link from "next/link";
 import { LastUpdated } from "@/components/last-updated";
 import {
   Plus, X, Download, Upload, Copy, Trash2, Shield, Zap, Swords,
@@ -1233,10 +1234,10 @@ export default function TeamBuilderPage() {
                 {t('teamBuilder.description')}
               </p>
               <div className="flex items-center gap-2 mt-1.5">
-                <a href="/battle-bot" className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[9px] font-bold uppercase tracking-wider bg-gradient-to-r from-amber-400/15 to-yellow-500/15 border border-amber-400/30 text-amber-700 hover:border-amber-400/50 transition-all">
+                <Link href="/battle-bot" className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[9px] font-bold uppercase tracking-wider bg-gradient-to-r from-amber-400/15 to-yellow-500/15 border border-amber-400/30 text-amber-700 hover:border-amber-400/50 transition-all">
                   <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
                   {t('teamBuilder.poweredBy')}
-                </a>
+                </Link>
                 <LastUpdated page="team-builder" />
               </div>
             </div>
