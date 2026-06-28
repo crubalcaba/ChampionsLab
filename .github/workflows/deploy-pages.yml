@@ -1,0 +1,76 @@
+name: Deploy to GitHub Pages
+
+# Deploys the static Next.js export (./out/) to GitHub Pages.
+# Requires: repo Settings → Pages → Source = "GitHub Actions".
+# Site URL: https://<owner>.github.io/ChampionsLab/
+#
+# `master` is the personal/deploy branch for this fork (see .copilot-wiki/agent-rules.md).
+# `main` is the upstream mirror and intentionally not built here.
+
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow one concurrent deploy; don't cancel an in-progress run so a Pages
+# deployment always finishes cleanly.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      # next.config.ts sets typescript.ignoreBuildErrors: true (Next 16
+      # Turbopack TS-check OOM workaround). Run tsc standalone so CI still
+      # catches type regressions.
+      - name: Typecheck
+        run: npx tsc --noEmit --skipLibCheck
+
+      - name: Build static export
+        env:
+          GITHUB_PAGES: "true"
+        run: npm run build
+
+      # GitHub Pages runs Jekyll by default, which filters paths starting
+      # with "_" — and Next emits everything under _next/. .nojekyll opts out.
+      - name: Disable Jekyll
+        run: touch out/.nojekyll
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: out
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+

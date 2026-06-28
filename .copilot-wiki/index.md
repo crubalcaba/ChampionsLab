@@ -18,6 +18,7 @@ This wiki is **agent-maintained**. Each page is a synthesised, drift-checked ans
 ## Operations
 
 - [build-and-verification](build-and-verification.md) — Why `npm run build` is the verification gate, the Next 16 TS check OOM workaround, the absence of a test suite, lint/format setup.
+- [github-pages-deployment](github-pages-deployment.md) — How the fork ships to `crubalcaba.github.io/ChampionsLab/`: workflow, `basePath` toggle, the `next/image` + `spriteUrl` manual-prefix gotcha, custom-domain switch-over plan.
 - [scripts-and-data-ops](scripts-and-data-ops.md) — What lives in `scripts/`, the naming-prefix convention (`fetch-*`, `audit-*`, `validate-*`, `qa-*`, `run-*`, …), and how to run each kind.
 - [ui-conventions](ui-conventions.md) — shadcn `base-nova`, `lucide-react`, the `@/lib/motion` re-export rule, client-component default, image `remotePatterns` allow-list, security headers.
 - [local-only-overrides](local-only-overrides.md) — Tracked files held under `git update-index --skip-worktree`. **Read before editing `.gitignore`, `src/app/globals.css`, or `src/app/layout.tsx`** — local diffs there are invisible to `git status` by design.

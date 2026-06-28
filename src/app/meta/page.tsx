@@ -447,10 +447,10 @@ export default function MetaPage() {
           {t('meta.description', { count: CHAMPIONS_TOURNAMENT_COUNT, teams: CHAMPIONS_TOURNAMENT_TOTAL_TEAMS.toLocaleString() })}
         </p>
         <div className="flex items-center gap-4 mt-3">
-          <a href="/battle-bot" className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gradient-to-r from-amber-50 to-yellow-50 border border-amber-300 hover:border-amber-400 transition-colors">
+          <Link href="/battle-bot" className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gradient-to-r from-amber-50 to-yellow-50 border border-amber-300 hover:border-amber-400 transition-colors">
             <Brain className="w-3.5 h-3.5 text-amber-600" />
             <span className="text-xs font-bold text-amber-700">{t('meta.badges.battleEngine')}</span>
-          </a>
+          </Link>
           <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-50 border border-emerald-200">
             <Award className="w-3.5 h-3.5 text-emerald-600" />
             <span className="text-xs font-medium text-emerald-700">{t('meta.badges.tournaments', { count: _VALID_CHAMPIONS_TEAMS.length })}</span>

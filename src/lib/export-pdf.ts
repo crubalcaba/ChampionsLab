@@ -776,7 +776,10 @@ function drawBar(doc: jsPDF, x: number, y: number, w: number, h: number, pct: nu
 
 async function loadLogoAsDataURL(): Promise<string | null> {
   try {
-    const resp = await fetch("/logo.png");
+    // Prefix with basePath so the fetch resolves correctly under GitHub Pages
+    // project-pages deploys (/ChampionsLab/logo.png). Empty string elsewhere.
+    const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+    const resp = await fetch(`${basePath}/logo.png`);
     const blob = await resp.blob();
     return new Promise((resolve) => {
       const reader = new FileReader();
