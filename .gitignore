@@ -65,7 +65,5 @@ next-env.d.ts
 .idea/
 .codegraph/
 
-# sprite assets (managed by sprite scripts, not source-controlled locally)
-/public/sprites/
 
 .gitignore

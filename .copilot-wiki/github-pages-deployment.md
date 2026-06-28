@@ -6,6 +6,7 @@ verified-against:
   - src/lib/sprite-url.ts
   - src/components/navbar.tsx
   - src/lib/export-pdf.ts
+  - src/app/layout.tsx
 key-symbols:
   - spriteUrl
   - NEXT_PUBLIC_BASE_PATH
@@ -16,6 +17,14 @@ key-symbols:
 ## TL;DR
 
 The fork deploys to **https://crubalcaba.github.io/ChampionsLab/** via `.github/workflows/deploy-pages.yml` on every push to `master`. Static export only — no server. A `GITHUB_PAGES=true` env var at build time switches on `basePath: "/ChampionsLab"` and exposes `NEXT_PUBLIC_BASE_PATH` so the manual-path code paths (sprites, logo, PDF logo fetch) prefix correctly. Local dev, `npm run dev`, and the Electron portable bundle are **unaffected** — they all build/run with no env var and root-relative paths.
+
+## Sprites are committed to the repo
+
+`public/sprites/*.png` is tracked in git on `master` (commit `52dbc26`, 2026-06-28). Previously `/public/sprites/` was in `.gitignore` because the developer used local sprite-generation scripts and didn't want the noise — but **GitHub Pages only ships what's in git**, so any sprite that wasn't force-added showed as a 404 on the live site. The ignore rule was removed and the 58 untracked files were checked in.
+
+When you add new sprites (via `scripts/fetch-*` or manual download), commit them. Don't re-introduce a `/public/sprites/` rule in `.gitignore`. If you want the noise hidden locally but tracked in git, use `git update-index --skip-worktree` per [local-only-overrides](local-only-overrides.md) instead.
+
+There is one known orphan reference — `pokemon-data.ts` cites `/sprites/10061.png` but the file is not present on disk or in git. Either add the sprite or remove the reference; until then it 404s everywhere (not Pages-specific).
 
 ## How the basePath toggle works
 
@@ -46,8 +55,14 @@ Non-sprite root-relative assets that needed manual fixes:
 |---|---|---|
 | `src/components/navbar.tsx` | `<Image src="/logo.png">` | Inline `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/logo.png` |
 | `src/lib/export-pdf.ts` | `fetch("/logo.png")` (PDF export) | Same inline prefix |
+| `src/app/layout.tsx` | `metadata.icons.icon[]` + `metadata.icons.apple` (`/icon-192.png`, `/icon-512.png`, `/apple-touch-icon.png`) | Same inline prefix — Next emits `<link rel="icon" href="...">` verbatim from the metadata URL and does NOT prepend `basePath`. Without the prefix the browser tab icon 404s on Pages. |
 
-Icons declared in `metadata.icons` (root `layout.tsx`) and Next-generated `<link rel="preload" href="/_next/...">` are handled by Next automatically — no fix needed.
+**Auto-prefixed by Next, do not touch:**
+
+- `_next/static/*` (covered by `assetPrefix`).
+- `next/link` / `usePathname` / `router.push` (covered by `basePath`).
+- `metadata.openGraph.images` and `metadata.twitter.images` — these are resolved against `metadataBase` (`https://championslab.xyz`) into fully-qualified absolute URLs, so they do **not** want a `basePath` prefix. Adding one produces e.g. `https://championslab.xyz/ChampionsLab/opengraph-image`, which is wrong. Leave them as bare `"/opengraph-image"`.
+- `metadata.metadataBase`-resolved canonical / `og:url` URLs — same reasoning.
 
 ## Workflow
 
