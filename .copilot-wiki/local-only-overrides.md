@@ -1,5 +1,5 @@
 ---
-last-verified: 2026-06-27
+last-verified: 2026-06-28
 verified-against:
   - .gitignore
   - src/app/globals.css
@@ -11,13 +11,14 @@ key-symbols:
 
 # Local-only overrides (skip-worktree files)
 
-**TL;DR.** Three tracked files have `git update-index --skip-worktree` set so their local modifications never appear in `git status` / `git diff` and never enter PRs. They hold personal dev-environment tweaks the upstream project doesn't want.
+**TL;DR.** Two tracked files have `git update-index --skip-worktree` set so their local modifications never appear in `git status` / `git diff` and never enter PRs. They hold personal dev-environment tweaks the upstream project doesn't want.
+
+> Historical note (2026-06-28): `.gitignore` was previously listed here with a `/public/sprites/` row. That entry was removed from `.gitignore` on master (commit `52dbc26`) so the GitHub Pages deploy ships every sprite — see [github-pages-deployment](github-pages-deployment.md). If you ever re-introduce a local-only `.gitignore` diff, re-add the row here AND re-apply `git update-index --skip-worktree .gitignore`.
 
 ## Currently skipped files
 
 | File | Local-only change | Why local |
 |---|---|---|
-| `.gitignore` | Adds `.idea/`, `.github/`, `.codegraph/`, `.copilot-wiki/`, `/public/sprites/` | Personal IDE + agent tooling, sprite-folder noise. Upstream doesn't ship these ignores. |
 | `src/app/globals.css` | Adds `--font-emoji` CSS var + a global `html, body { font-family: ... }` block that wires Noto Color Emoji into the fallback chain after `Apple Color Emoji`. | Personal preference for nicer emoji rendering on non-Apple devices. Not wanted upstream. |
 | `src/app/layout.tsx` | Imports `Noto_Color_Emoji` from `next/font/google`, instantiates it as `notoColorEmoji` with the `--font-emoji` CSS variable, and appends `${notoColorEmoji.variable}` to the `<html className>`. | Same as above — paired with the `globals.css` change. |
 

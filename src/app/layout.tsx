@@ -10,6 +10,16 @@ import { ThemeInit } from "@/components/theme-init";
 import { MobileNavInit } from "@/components/mobile-nav-init";
 import { I18nProvider } from "@/lib/i18n";
 
+// GitHub Pages serves the site under /ChampionsLab/. Next auto-prefixes
+// next/link, usePathname, and _next/static/* with basePath, but it does
+// NOT prefix user-supplied URLs in `metadata.icons` — those render as
+// raw <link rel="icon" href="..."> and 404 without the prefix. Inline the
+// basePath the same way navbar.tsx and export-pdf.ts do.
+// (openGraph/twitter images don't need this — `metadataBase` makes them
+//  absolute against championslab.xyz.)
+// See .copilot-wiki/github-pages-deployment.md.
+const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+
 const inter = localFont({
   variable: "--font-sans",
   src: "./fonts/Inter-Variable.woff2",
@@ -54,10 +64,10 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://championslab.xyz"),
   icons: {
     icon: [
-      { url: "/icon-192.png", sizes: "192x192", type: "image/png" },
-      { url: "/icon-512.png", sizes: "512x512", type: "image/png" },
+      { url: `${BASE_PATH}/icon-192.png`, sizes: "192x192", type: "image/png" },
+      { url: `${BASE_PATH}/icon-512.png`, sizes: "512x512", type: "image/png" },
     ],
-    apple: "/apple-touch-icon.png",
+    apple: `${BASE_PATH}/apple-touch-icon.png`,
   },
   openGraph: {
     title: "Not exactly Champions Lab - Pokémon Champions 2026",
